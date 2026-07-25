@@ -1367,6 +1367,197 @@ FORM: AI workspace landing page with app-like immediacy, followed by an evidence
       .release-panel { padding: 24px 18px 20px; }
     }
 
+  
+    /* Purchase ticket completion and tracking */
+    .order-tracker-link {
+      width: 100%;
+      min-height: 44px;
+      display: grid;
+      place-items: center;
+      margin-top: 10px;
+      border: 1px solid var(--line-strong);
+      border-radius: 8px;
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 620;
+      transition: background 160ms ease, border-color 160ms ease;
+    }
+    .order-tracker-link:hover { background: #141414; border-color: #777; }
+    .purchase-complete {
+      position: relative;
+      margin-top: 18px;
+      padding: 20px;
+      border: 1px solid var(--warning);
+      background: rgba(242,211,108,.035);
+      overflow: hidden;
+    }
+    .purchase-complete[hidden] { display: none; }
+    .purchase-complete::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(110deg, transparent 0 46%, rgba(255,255,255,.04) 50%, transparent 54%);
+      transform: translateX(-100%);
+      animation: receiptSweep 5.5s linear infinite;
+    }
+    @keyframes receiptSweep { to { transform: translateX(100%); } }
+    .purchase-complete-kicker { color: var(--warning); font: 700 11px/1.3 var(--mono); letter-spacing: .1em; }
+    .purchase-complete h4 { margin: 9px 0 8px; font: 620 24px/1.1 var(--font-display); letter-spacing: -.03em; }
+    .purchase-complete p { margin: 0; color: #d8d0a3; font-size: 13px; }
+    .saved-order-grid { display: grid; grid-template-columns: 1fr auto; gap: 8px; margin-top: 16px; }
+    .saved-order-grid code {
+      min-width: 0;
+      padding: 12px;
+      border: 1px solid #59513a;
+      background: #070705;
+      color: #fff4b9;
+      overflow-wrap: anywhere;
+      font: 12px/1.5 var(--mono);
+    }
+    .saved-order-grid button { min-height: 44px; padding-inline: 14px; }
+    .purchase-complete-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+    .purchase-complete-actions a {
+      min-height: 44px;
+      display: grid;
+      place-items: center;
+      border: 1px solid #6b6245;
+      border-radius: 8px;
+      background: #11100b;
+      color: #fff4b9;
+      text-decoration: none;
+      font-weight: 650;
+    }
+    .purchase-complete-actions a:first-child { background: var(--warning); color: #171302; border-color: var(--warning); }
+    .purchase-complete-meta { margin-top: 10px !important; color: var(--faint) !important; font: 11px/1.5 var(--mono) !important; }
+    @media (max-width: 620px) {
+      .saved-order-grid, .purchase-complete-actions { grid-template-columns: 1fr; }
+    }
+
+
+    /* Visible purchase-ticket workflow */
+    .ticket-hub-section { position: relative; }
+    .ticket-hub {
+      display: grid;
+      grid-template-columns: minmax(0, 1.04fr) minmax(360px, .96fr);
+      border: 1px solid var(--line-strong);
+      background: #060606;
+      overflow: hidden;
+    }
+    .ticket-story, .ticket-lookup { min-width: 0; padding: 30px; }
+    .ticket-lookup { border-left: 1px solid var(--line); background: #090909; }
+    .ticket-signal {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--warning);
+      font: 700 11px/1.4 var(--mono);
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+    .ticket-signal::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border: 1px dashed currentColor;
+      border-radius: 50%;
+      animation: orbit 4s linear infinite;
+    }
+    .ticket-story h3, .ticket-lookup h3 {
+      margin: 18px 0 12px;
+      font: 560 clamp(2rem, 3.7vw, 4rem)/.96 var(--font-display);
+      letter-spacing: -.045em;
+    }
+    .ticket-story > p, .ticket-lookup > p { margin: 0; color: var(--muted); }
+    .ticket-steps { display: grid; margin-top: 28px; border-top: 1px solid var(--line); }
+    .ticket-step {
+      display: grid;
+      grid-template-columns: 42px minmax(0, 1fr);
+      gap: 15px;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .ticket-step b {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border: 1px solid #555;
+      border-radius: 50%;
+      color: var(--warning);
+      font: 700 11px/1 var(--mono);
+    }
+    .ticket-step strong { display: block; font-weight: 620; }
+    .ticket-step span { display: block; margin-top: 4px; color: var(--muted); font-size: 13px; }
+    .ticket-lookup-form { display: grid; gap: 15px; margin-top: 24px; }
+    .ticket-lookup-form label { display: grid; gap: 8px; color: var(--muted); font-size: 12px; }
+    .ticket-lookup-form input {
+      width: 100%;
+      min-width: 0;
+      height: 48px;
+      padding: 0 13px;
+      border: 1px solid #3a3a3a;
+      background: #111;
+      color: var(--text);
+      outline: 0;
+      font-family: var(--mono);
+    }
+    .ticket-lookup-form input:focus { border-color: var(--text); }
+    .ticket-lookup-form button {
+      min-height: 48px;
+      border: 1px solid var(--text);
+      border-radius: 8px;
+      background: var(--text);
+      color: #050505;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .ticket-privacy { margin-top: 13px !important; color: var(--faint) !important; font-size: 11px !important; }
+    .saved-ticket-card {
+      margin-top: 22px;
+      padding: 17px;
+      border: 1px solid var(--warning);
+      background: rgba(242,211,108,.035);
+    }
+    .saved-ticket-card[hidden] { display: none; }
+    .saved-ticket-card > span { color: var(--warning); font: 700 10px/1.3 var(--mono); letter-spacing: .08em; }
+    .saved-ticket-card strong { display: block; margin-top: 8px; }
+    .saved-ticket-card code { display: block; margin-top: 9px; color: #ddd4a7; word-break: break-all; }
+    .saved-ticket-card a {
+      display: inline-flex;
+      margin-top: 14px;
+      padding-bottom: 2px;
+      border-bottom: 1px solid currentColor;
+      color: var(--warning);
+      font-weight: 650;
+    }
+    .purchase-ticket-warning {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 18px;
+      align-items: center;
+      margin: -30px 0 34px;
+      padding: 18px 20px;
+      border: 1px solid var(--warning);
+      background: rgba(242,211,108,.035);
+    }
+    .purchase-ticket-warning b {
+      min-width: 72px;
+      color: var(--warning);
+      font: 800 12px/1.25 var(--mono);
+      letter-spacing: .08em;
+    }
+    .purchase-ticket-warning p { margin: 0; color: #d8d0a3; }
+    .purchase-ticket-warning strong { color: var(--warning); }
+    @media (max-width: 900px) {
+      .ticket-hub { grid-template-columns: 1fr; }
+      .ticket-lookup { border-left: 0; border-top: 1px solid var(--line); }
+    }
+    @media (max-width: 620px) {
+      .ticket-story, .ticket-lookup { padding: 21px; }
+      .purchase-ticket-warning { grid-template-columns: 1fr; margin-top: -12px; }
+    }
+
   </style>
 </head>
 <body><canvas id="site-field" width="1600" height="900" aria-hidden="true"></canvas><div class="scroll-progress" aria-hidden="true"><i id="scroll-progress-bar"></i></div><div class="cursor-orbit" id="cursor-orbit" aria-hidden="true"></div>
@@ -1421,7 +1612,11 @@ FORM: AI workspace landing page with app-like immediacy, followed by an evidence
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 7h16v12H4z"></path><path d="M4 10h16M8 15h4"></path></svg>
             <span>Buy with USDT</span>
           </a>
-          <a class="nav-item" style="--i:7" href="https://bugreporttrading.irancord.ir/" target="_blank" rel="noopener">
+          <a class="nav-item" style="--i:7" href="#orders">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M5 5h14v14H5z"></path><path d="M8 9h8M8 13h5"></path><circle cx="17" cy="17" r="3"></circle></svg>
+            <span>Purchase tickets</span>
+          </a>
+          <a class="nav-item" style="--i:8" href="https://bugreporttrading.irancord.ir/" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M9 9h6v6H9z"></path><path d="M8 3h8M8 21h8M3 8v8M21 8v8"></path><path d="m5 5 2 2m12-2-2 2M5 19l2-2m12 2-2-2"></path></svg>
             <span>Bug reports</span>
           </a>
@@ -1460,7 +1655,7 @@ FORM: AI workspace landing page with app-like immediacy, followed by an evidence
           <button class="mode-button" role="tab" aria-selected="true" data-mode="Build" type="button">Build</button>
           <button class="mode-button" role="tab" aria-selected="false" data-mode="Watch" type="button">Watch</button>
         </div>
-        <div class="top-status"><a class="top-download" href="https://drive.google.com/file/d/1EuqQOymibHALxWDJKXOnMw10N4l1AEPW/view?usp=drive_link" target="_blank" rel="noopener">Download 6.1</a><span>Research only</span><span class="status-orbit" aria-hidden="true"></span></div>
+        <div class="top-status"><a class="top-download" href="https://purchasetrading.irancord.ir/" target="_blank" rel="noopener">Purchase tickets</a><a class="top-download" href="https://drive.google.com/file/d/1EuqQOymibHALxWDJKXOnMw10N4l1AEPW/view?usp=drive_link" target="_blank" rel="noopener">Download 6.1</a><span>Research only</span><span class="status-orbit" aria-hidden="true"></span></div>
       </header>
 
       <section class="hero" id="home" aria-labelledby="hero-title">
@@ -1716,10 +1911,55 @@ FORM: AI workspace landing page with app-like immediacy, followed by an evidence
           </div>
         </section>
 
+
+        <section class="section ticket-hub-section" id="orders">
+          <div class="section-heading" data-reveal>
+            <h2>Every purchase becomes a private ticket.</h2>
+            <p>Your transaction hash is the permanent order identifier. Keep it after payment verification and after the product keys arrive; it is required with the exact purchase email to reopen the order.</p>
+          </div>
+
+          <div class="ticket-hub" data-reveal>
+            <div class="ticket-story">
+              <span class="ticket-signal">Private fulfillment channel</span>
+              <h3>One order. One card for every Device ID.</h3>
+              <p>The purchase desk verifies the payment, reviews each requested device, and publishes a separate signed key beside the Device ID it belongs to.</p>
+              <div class="ticket-steps">
+                <div class="ticket-step"><b>01</b><div><strong>Submit the paid transaction</strong><span>The transaction hash and purchase email create the private ticket.</span></div></div>
+                <div class="ticket-step"><b>02</b><div><strong>Payment is reviewed</strong><span>Status updates and public administrator messages appear on the ticket.</span></div></div>
+                <div class="ticket-step"><b>03</b><div><strong>Keys are split by device</strong><span>Each Device ID receives its own clearly separated product-key card.</span></div></div>
+              </div>
+            </div>
+
+            <div class="ticket-lookup">
+              <span class="ticket-signal">Open an existing order</span>
+              <h3>Unlock your ticket.</h3>
+              <p>Enter the same transaction hash and email used during checkout. The ticket opens on the secure purchase Worker.</p>
+              <form class="ticket-lookup-form" id="orderLookupForm" method="post" action="https://purchasetrading.irancord.ir/order/lookup" target="_blank">
+                <label for="orderLookupHash">USDT transaction hash<input id="orderLookupHash" name="transaction_hash" maxlength="80" placeholder="0x…" spellcheck="false" autocomplete="off" required></label>
+                <label for="orderLookupEmail">Purchase email<input id="orderLookupEmail" name="buyer_email" maxlength="180" type="email" placeholder="you@example.com" autocomplete="email" required></label>
+                <button type="submit">Open private purchase ticket →</button>
+              </form>
+              <p class="ticket-privacy">Both values are required because transaction hashes are publicly visible on the blockchain. Your ticket details and keys are not exposed through the hash alone.</p>
+              <div class="saved-ticket-card" id="savedTicketCard" hidden>
+                <span>THIS BROWSER HAS A SAVED PURCHASE</span>
+                <strong id="savedTicketReference">TradingBot 3000 order</strong>
+                <code id="savedTicketHash"></code>
+                <a id="savedTicketOpen" href="https://purchasetrading.irancord.ir/" target="_blank" rel="noopener">Continue to the private tracker →</a>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section class="section checkout-section" id="purchase">
           <div class="section-heading" data-reveal>
             <h2>Buy a signed license with USDT.</h2>
-            <p>Choose the entitlement, send the exact amount to the published address, then submit the transaction hash and your TradingBot 3000 Device ID. No screenshot or PDF upload is required.</p>
+            <p>Choose the entitlement, send the exact amount, then submit the transaction hash and Device IDs. The transaction becomes a private purchase ticket. Save the hash even after fulfillment because it is required with your purchase email to reopen the order and retrieve its device-bound keys.</p>
+          </div>
+
+
+          <div class="purchase-ticket-warning" data-reveal>
+            <b>SAVE THE HASH</b>
+            <p>The transaction hash is not temporary payment proof. It is your permanent private-ticket identifier. <strong>Keep it even after every product key has been delivered.</strong></p>
           </div>
 
           <div class="checkout-shell" data-reveal>
@@ -1749,7 +1989,7 @@ FORM: AI workspace landing page with app-like immediacy, followed by an evidence
                 <div class="payment-row"><span>Reference</span><code id="purchaseReference">TB3-PENDING</code><button class="copy-control" type="button" data-copy-target="purchaseReference">Copy</button></div>
               </div>
               <p class="payment-warning"><strong>Network check:</strong> send only native USDT on the exact network shown. Sending another token or using another transport protocol can make the payment unrecoverable.</p>
-              <button class="packet-button" id="copyPaymentInstructions" type="button" style="width:100%;margin-top:10px">Copy full payment instructions</button>
+              <button class="packet-button" id="copyPaymentInstructions" type="button" style="width:100%;margin-top:10px">Copy full payment instructions</button><a class="order-tracker-link" href="https://purchasetrading.irancord.ir/" target="_blank" rel="noopener">Already paid? Open private order tracker →</a>
 
               <form class="receipt-form" id="purchaseForm" novalidate>
                 <div class="field-row">
@@ -1762,6 +2002,14 @@ FORM: AI workspace landing page with app-like immediacy, followed by an evidence
                 <button class="checkout-button" id="submitPurchase" type="submit">Send purchase request</button>
                 <div class="purchase-actions"><button class="packet-button" id="copyPurchasePacket" type="button">Copy purchase packet</button><button class="packet-button" id="downloadPurchasePacket" type="button">Download receipt text</button></div>
                 <div class="purchase-status" id="purchaseStatus" role="status" aria-live="polite"></div>
+                <section class="purchase-complete" id="purchaseComplete" hidden aria-live="polite">
+                  <div class="purchase-complete-kicker">PURCHASE TICKET CREATED</div>
+                  <h4>Save the transaction hash.</h4>
+                  <p>This remains your order identifier after the product keys are delivered. The private tracker requires this hash and the exact purchase email.</p>
+                  <div class="saved-order-grid"><code id="savedTransactionHash"></code><button class="packet-button" id="copySavedTransactionHash" type="button">Copy hash</button></div>
+                  <div class="purchase-complete-actions"><a id="openOrderTracker" href="https://purchasetrading.irancord.ir/" target="_blank" rel="noopener">Open private order tracker</a><a id="downloadSavedOrder" href="#">Download saved order proof</a></div>
+                  <p class="purchase-complete-meta" id="savedOrderMeta"></p>
+                </section>
               </form>
             </div>
           </div>
@@ -1769,7 +2017,7 @@ FORM: AI workspace landing page with app-like immediacy, followed by an evidence
 
         <footer class="site-footer">
           <span>© 2026 UselessExpensive Software. All rights reserved. TradingBot 3000 is research-only software; it does not route orders.</span>
-          <div class="footer-links"><a class="footer-link" href="#release">Release 6.1</a><a class="footer-link" href="https://drive.google.com/file/d/1EuqQOymibHALxWDJKXOnMw10N4l1AEPW/view?usp=drive_link" target="_blank" rel="noopener">Download</a><a class="footer-link" href="#pricing">Pricing</a><a class="footer-link" href="#purchase">Buy with USDT</a><a class="footer-link" href="https://bugreporttrading.irancord.ir/" target="_blank" rel="noopener">Bug reporter</a><a class="footer-link" href="mailto:purchase@irancord.ir">Purchase support</a><a class="footer-link" href="#home">Back to top</a></div>
+          <div class="footer-links"><a class="footer-link" href="#release">Release 6.1</a><a class="footer-link" href="https://drive.google.com/file/d/1EuqQOymibHALxWDJKXOnMw10N4l1AEPW/view?usp=drive_link" target="_blank" rel="noopener">Download</a><a class="footer-link" href="#pricing">Pricing</a><a class="footer-link" href="#purchase">Buy with USDT</a><a class="footer-link" href="https://purchasetrading.irancord.ir/" target="_blank" rel="noopener">Purchase tickets</a><a class="footer-link" href="https://bugreporttrading.irancord.ir/" target="_blank" rel="noopener">Bug reporter</a><a class="footer-link" href="mailto:purchase@irancord.ir">Purchase support</a><a class="footer-link" href="#home">Back to top</a></div>
         </footer>
       </div>
     </main>
@@ -2015,6 +2263,7 @@ FORM: AI workspace landing page with app-like immediacy, followed by an evidence
         address: '0x25db24d66a9574bca8d31e72ab835e6a8339ddfa',
         email: 'purchase@irancord.ir',
         endpoint: 'https://purchasetrading.irancord.ir/api/purchase',
+        tracker: 'https://purchasetrading.irancord.ir/',
         tiers: Object.freeze({ CORE: { name: 'Core', price: 49 }, PRO: { name: 'Pro', price: 129 }, MAX: { name: 'Max', price: 299 } }),
         durations: Object.freeze([7, 30, 90, 365])
       });
@@ -2045,6 +2294,38 @@ FORM: AI workspace landing page with app-like immediacy, followed by an evidence
         purchaseStatus.textContent = message;
         purchaseStatus.classList.toggle('error', error);
       };
+      const showSavedOrder = (order, shouldScroll = false) => {
+        if (!order || !order.transactionHash) return;
+        const complete = $id('purchaseComplete');
+        complete.hidden = false;
+        $id('savedTransactionHash').textContent = order.transactionHash;
+        $id('savedOrderMeta').textContent = `Reference ${order.reference || 'pending'} · Purchase email ${order.buyerEmail || 'not saved'}`;
+        $id('openOrderTracker').href = PURCHASE_CONFIG.tracker;
+        const lookupHash = $id('orderLookupHash');
+        const lookupEmail = $id('orderLookupEmail');
+        if (lookupHash && !lookupHash.value) lookupHash.value = order.transactionHash;
+        if (lookupEmail && !lookupEmail.value) lookupEmail.value = order.buyerEmail || '';
+        const savedCard = $id('savedTicketCard');
+        if (savedCard) {
+          savedCard.hidden = false;
+          $id('savedTicketReference').textContent = order.reference || 'TradingBot 3000 order';
+          $id('savedTicketHash').textContent = order.transactionHash;
+          $id('savedTicketOpen').href = PURCHASE_CONFIG.tracker;
+        }
+        if (shouldScroll) complete.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'nearest' });
+      };
+      const savedOrderText = (order) => [
+        'TRADINGBOT 3000 SAVED PURCHASE TICKET',
+        `Reference: ${order.reference || ''}`,
+        `Purchase email: ${order.buyerEmail || ''}`,
+        `Transaction hash: ${order.transactionHash || ''}`,
+        `Order tracker: ${PURCHASE_CONFIG.tracker}`,
+        '',
+        'SAVE THE TRANSACTION HASH. It is required with the purchase email to reopen the private order page after this browser session and after product-key delivery.'
+      ].join('\n');
+      let lastSavedOrder = null;
+      try { lastSavedOrder = JSON.parse(localStorage.getItem('tb3-last-order') || 'null'); } catch {}
+      if (lastSavedOrder) showSavedOrder(lastSavedOrder, false);
       const updateCheckout = () => {
         purchaseState.tier = checkoutTier.value;
         purchaseState.duration = Math.max(7, Number(checkoutDuration.value));
@@ -2152,8 +2433,18 @@ FORM: AI workspace landing page with app-like immediacy, followed by an evidence
         purchaseForm.dataset.busy = 'true';
         try {
           const result = await postPurchase();
-          setPurchaseStatus(`Purchase request sent. Keep reference ${result.reference || purchaseState.reference}.`);
-          submitPurchase.textContent = 'Request sent';
+          const savedOrder = {
+            reference: result.reference || purchaseState.reference,
+            transactionHash: result.transactionHash || $id('transactionHash').value.trim(),
+            buyerEmail: $id('buyerEmail').value.trim(),
+            lookupUrl: result.lookupUrl || PURCHASE_CONFIG.tracker,
+            savedAt: new Date().toISOString()
+          };
+          localStorage.setItem('tb3-last-order', JSON.stringify(savedOrder));
+          lastSavedOrder = savedOrder;
+          showSavedOrder(savedOrder, true);
+          setPurchaseStatus('Purchase ticket created. Save the transaction hash before leaving this page.');
+          submitPurchase.textContent = 'Ticket created';
           localStorage.removeItem('tb3-purchase-reference');
         } catch (error) {
           setPurchaseStatus(error.message || 'Could not send the purchase request. Contact purchase@irancord.ir and include your reference.', true);
@@ -2176,7 +2467,7 @@ FORM: AI workspace landing page with app-like immediacy, followed by an evidence
           `Exact amount: ${amountText()} USDT`,
           `Receipt email: ${PURCHASE_CONFIG.email}`,
           '',
-          'Send only USDT on the exact network shown. After payment, submit the transaction hash and TradingBot 3000 Device ID through the purchase form.'
+          'Send only USDT on the exact network shown. After payment, submit the transaction hash and Device IDs. Save the hash permanently: the private order tracker requires it with your purchase email, including after key delivery.'
         ].join('\n');
         await copyText(instructions); setPurchaseStatus('Full payment instructions copied.');
       });
@@ -2188,6 +2479,22 @@ FORM: AI workspace landing page with app-like immediacy, followed by an evidence
         const problem = validatePurchase(); if (problem) { setPurchaseStatus(problem, true); return; }
         const blob = new Blob([await buildPurchasePacket()], { type: 'text/plain;charset=utf-8' });
         const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `${purchaseState.reference}-receipt.txt`; document.body.appendChild(link); link.click(); link.remove(); setTimeout(() => URL.revokeObjectURL(link.href), 1000); setPurchaseStatus('Receipt text downloaded.');
+      });
+      $id('copySavedTransactionHash').addEventListener('click', async () => {
+        if (!lastSavedOrder) return;
+        await copyText(lastSavedOrder.transactionHash);
+        setPurchaseStatus('Saved transaction hash copied.');
+      });
+      $id('downloadSavedOrder').addEventListener('click', (event) => {
+        event.preventDefault();
+        if (!lastSavedOrder) return;
+        const blob = new Blob([savedOrderText(lastSavedOrder)], { type: 'text/plain;charset=utf-8' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `${lastSavedOrder.reference || 'tradingbot-order'}-save-this.txt`;
+        document.body.appendChild(link); link.click(); link.remove();
+        setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+        setPurchaseStatus('Saved order proof downloaded. Keep it private.');
       });
       $id('sidebarSearch')?.addEventListener('click', () => { $id('home').scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth' }); setTimeout(() => input.focus(), reducedMotion ? 0 : 450); });
       $id('voicePreview')?.addEventListener('click', () => { input.placeholder = 'Voice capture is available in the desktop application'; input.focus(); });
