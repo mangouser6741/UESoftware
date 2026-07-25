@@ -1,0 +1,2082 @@
+<!doctype html>
+<!--
+THESIS: TradingBot 3000 should feel like a focused AI workspace, not a neon trading casino. The first view is a calm command surface where visitors can immediately understand the product by describing a strategy.
+OWN-WORLD: Near-black canvas, charcoal controls, white humanist typography, hairline dividers, and functional green/red market states. Motion comes from trading behavior—ticks, order packets, chart traces, and rule compilation—not decorative glow.
+STORY: Describe a market idea, watch it become explicit research rules, inspect the risk gates, then challenge the evidence without routing an order.
+FIRST VIEWPORT: A fixed utility rail, a centered Build/Watch switch, a large plain question, and a wide command composer that animates into a strategy run.
+FORM: AI workspace landing page with app-like immediacy, followed by an evidence-led product narrative.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="TradingBot 3000 is a research-only market workstation with live public data, streaming AI, transparent backtests, signed licensing, and prepaid USDT plans by UselessExpensive Software." />
+  <meta name="theme-color" content="#000000" />
+  <title>TradingBot 3000 — UselessExpensive Software</title>
+  <style>
+    :root {
+      --bg: #000000;
+      --sidebar: #070707;
+      --surface: #212121;
+      --surface-2: #2b2b2b;
+      --surface-3: #171717;
+      --hover: #1d1d1d;
+      --line: #2b2b2b;
+      --line-strong: #444444;
+      --text: #f4f4f4;
+      --muted: #b4b4b4;
+      --faint: #777777;
+      --positive: #9ee6b0;
+      --negative: #ff9a9a;
+      --warning: #f2d36c;
+      --focus: #ffffff;
+      --rail-width: 256px;
+      --font: "Aptos", "SF Pro Text", "Helvetica Neue", Helvetica, sans-serif;
+      --font-display: "Aptos Display", "SF Pro Display", "Helvetica Neue", Helvetica, sans-serif;
+      --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      --ease-out: cubic-bezier(.16, 1, .3, 1);
+      --ease-snap: cubic-bezier(.2, .8, .2, 1);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; background: var(--bg); }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: var(--text);
+      background: var(--bg);
+      font-family: var(--font);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      overflow-x: hidden;
+    }
+
+    button, input, textarea, select { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: inherit; }
+    svg { display: block; }
+    ::selection { background: #f4f4f4; color: #000; }
+
+    .skip-link {
+      position: fixed;
+      left: 16px;
+      top: 12px;
+      z-index: 1000;
+      padding: 10px 14px;
+      background: var(--text);
+      color: var(--bg);
+      border-radius: 8px;
+      transform: translateY(-140%);
+      transition: transform 160ms ease;
+    }
+    .skip-link:focus { transform: translateY(0); }
+
+    .market-rail {
+      position: fixed;
+      z-index: 2;
+      left: var(--rail-width);
+      right: 0;
+      height: 24px;
+      overflow: hidden;
+      pointer-events: none;
+      opacity: .44;
+      mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    }
+    .market-rail.top { top: 0; }
+    .market-rail.bottom { bottom: 0; transform: rotate(180deg); }
+    .market-rail-track {
+      width: max-content;
+      display: flex;
+      gap: 34px;
+      align-items: center;
+      white-space: nowrap;
+      font: 11px/24px var(--mono);
+      color: var(--faint);
+      animation: tape 34s linear infinite;
+    }
+    .market-rail.bottom .market-rail-track { animation-duration: 43s; }
+    .market-rail .up { color: var(--positive); }
+    .market-rail .down { color: var(--negative); }
+    @keyframes tape { to { transform: translateX(-50%); } }
+
+    .app-shell { min-height: 100vh; }
+
+    .sidebar {
+      position: fixed;
+      inset: 0 auto 0 0;
+      z-index: 50;
+      width: var(--rail-width);
+      display: flex;
+      flex-direction: column;
+      background: var(--sidebar);
+      border-right: 1px solid var(--line);
+      transform: translateX(0);
+      transition: transform 260ms var(--ease-out);
+    }
+
+    .sidebar-head {
+      min-height: 62px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 0 16px 0 18px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      text-decoration: none;
+      font-family: var(--font-display);
+      font-size: 17px;
+      font-weight: 700;
+      white-space: nowrap;
+      letter-spacing: -.03em;
+    }
+
+    .brand-mark {
+      position: relative;
+      width: 22px;
+      height: 22px;
+      flex: 0 0 22px;
+    }
+    .brand-mark i {
+      position: absolute;
+      inset: 3px;
+      border: 1.5px solid var(--text);
+      border-radius: 50%;
+      animation: orbit 8s linear infinite;
+    }
+    .brand-mark i:nth-child(2) { inset: 6px 1px; animation-direction: reverse; animation-duration: 6s; }
+    .brand-mark i:nth-child(3) { inset: 1px 7px; animation-duration: 10s; }
+    @keyframes orbit { to { transform: rotate(360deg); } }
+
+    .icon-button {
+      width: 38px;
+      height: 38px;
+      display: inline-grid;
+      place-items: center;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: background 150ms ease, color 150ms ease;
+    }
+    .icon-button:hover { background: var(--hover); color: var(--text); }
+    .icon-button:focus-visible,
+    .nav-item:focus-visible,
+    .quick-action:focus-visible,
+    .primary-button:focus-visible,
+    .composer textarea:focus-visible,
+    .mode-button:focus-visible,
+    .run-again:focus-visible,
+    .footer-link:focus-visible,
+    .email-form input:focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    .sidebar-scroll {
+      min-height: 0;
+      flex: 1;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #303030 transparent;
+      padding: 4px 8px 18px;
+    }
+
+    .nav-stack { display: grid; gap: 3px; }
+    .nav-item {
+      width: 100%;
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 0 11px;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--text);
+      text-align: left;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 140ms ease, color 140ms ease;
+      animation: navIn 520ms var(--ease-out) both;
+      animation-delay: calc(var(--i) * 55ms + 80ms);
+    }
+    .nav-item:hover,
+    .nav-item.is-active { background: var(--hover); }
+    .nav-item svg { width: 19px; height: 19px; color: var(--muted); }
+    .nav-item.is-active svg { color: var(--text); }
+    @keyframes navIn {
+      from { opacity: 0; transform: translateX(-12px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .sidebar-section { margin-top: 26px; }
+    .sidebar-section h2 {
+      margin: 0 10px 9px;
+      font-size: 14px;
+      font-weight: 650;
+      color: var(--text);
+    }
+    .recent-list { display: grid; gap: 2px; }
+    .recent-item {
+      display: block;
+      overflow: hidden;
+      padding: 8px 10px;
+      border-radius: 7px;
+      color: #e7e7e7;
+      font-size: 14px;
+      text-decoration: none;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      transition: background 140ms ease;
+    }
+    .recent-item:hover { background: var(--hover); }
+
+    .sidebar-foot {
+      padding: 10px 8px;
+      border-top: 1px solid var(--line);
+      background: var(--sidebar);
+    }
+    .account {
+      display: grid;
+      grid-template-columns: 30px 1fr auto;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 9px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 140ms ease;
+    }
+    .account:hover { background: var(--hover); }
+    .avatar {
+      width: 30px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: #f0c900;
+      color: #1b1700;
+      font-size: 11px;
+      font-weight: 800;
+    }
+    .account strong { display: block; font-size: 14px; font-weight: 600; }
+    .account span { display: block; color: var(--muted); font-size: 12px; }
+
+    .main {
+      position: relative;
+      margin-left: var(--rail-width);
+      min-height: 100vh;
+      isolation: isolate;
+    }
+
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: var(--rail-width);
+      right: 0;
+      z-index: 40;
+      height: 58px;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      padding: 0 20px;
+      background: linear-gradient(#000 72%, rgba(0,0,0,0));
+      pointer-events: none;
+    }
+    .topbar > * { pointer-events: auto; }
+    .mobile-menu { display: none; justify-self: start; }
+    .mode-switch {
+      grid-column: 2;
+      min-width: 258px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding: 3px;
+      border-radius: 24px;
+      background: #151515;
+    }
+    .mode-button {
+      position: relative;
+      height: 39px;
+      border: 0;
+      border-radius: 20px;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: color 180ms ease;
+    }
+    .mode-button::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      border-radius: inherit;
+      background: #222;
+      opacity: 0;
+      transform: scale(.92);
+      transition: opacity 200ms ease, transform 280ms var(--ease-out);
+    }
+    .mode-button[aria-selected="true"] { color: var(--text); }
+    .mode-button[aria-selected="true"]::before { opacity: 1; transform: scale(1); }
+    .top-status { justify-self: end; display: flex; align-items: center; gap: 9px; color: var(--muted); font-size: 13px; }
+    .status-orbit { width: 18px; height: 18px; border: 1px dashed var(--muted); border-radius: 50%; animation: orbit 5s linear infinite; }
+
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 110px 24px 80px;
+      overflow: clip;
+    }
+
+    .hero-grid {
+      position: absolute;
+      inset: 18% 7% 10%;
+      z-index: -2;
+      opacity: .18;
+      background-image:
+        linear-gradient(var(--line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line) 1px, transparent 1px);
+      background-size: 58px 58px;
+      mask-image: radial-gradient(circle at 50% 45%, #000 0 20%, transparent 66%);
+      animation: gridDrift 20s linear infinite;
+    }
+    @keyframes gridDrift { to { background-position: 58px 58px; } }
+
+    .hero-ghost-chart {
+      position: absolute;
+      inset: auto 4% 9% 4%;
+      z-index: -1;
+      height: 39%;
+      opacity: .28;
+      pointer-events: none;
+    }
+    .hero-ghost-chart path {
+      fill: none;
+      stroke: #6d6d6d;
+      stroke-width: 1.25;
+      vector-effect: non-scaling-stroke;
+      stroke-dasharray: 1100;
+      stroke-dashoffset: 1100;
+      animation: drawLine 4s 700ms var(--ease-out) forwards, chartBreathe 7s 5s ease-in-out infinite;
+    }
+    @keyframes drawLine { to { stroke-dashoffset: 0; } }
+    @keyframes chartBreathe { 50% { opacity: .38; } }
+
+    .hero-inner {
+      width: min(920px, 100%);
+      margin-top: -2vh;
+      text-align: center;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 3vw, 3.1rem);
+      line-height: 1.12;
+      letter-spacing: -.035em;
+      font-weight: 520;
+      animation: heroIn 900ms 180ms var(--ease-out) both;
+    }
+    .hero h1 .word { display: inline-block; animation: wordFloat 6s ease-in-out infinite; animation-delay: calc(var(--word) * 100ms); }
+    @keyframes heroIn {
+      from { opacity: 0; filter: blur(8px); transform: translateY(18px); }
+      to { opacity: 1; filter: blur(0); transform: translateY(0); }
+    }
+    @keyframes wordFloat { 50% { transform: translateY(-2px); } }
+
+    .hero-subtitle {
+      max-width: 660px;
+      margin: 15px auto 0;
+      color: var(--muted);
+      font-size: 16px;
+      animation: heroIn 900ms 320ms var(--ease-out) both;
+    }
+
+    .command-zone {
+      position: relative;
+      width: min(880px, 100%);
+      margin: 38px auto 0;
+      animation: composerIn 1000ms 430ms var(--ease-out) both;
+    }
+    @keyframes composerIn {
+      from { opacity: 0; transform: translateY(26px) scale(.97); filter: blur(10px); }
+      to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+    }
+
+    .composer {
+      min-height: 64px;
+      display: grid;
+      grid-template-columns: 42px 1fr auto auto auto;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 8px 6px 10px;
+      border: 1px solid #353535;
+      border-radius: 28px;
+      background: var(--surface);
+      box-shadow: 0 2px 10px rgba(0,0,0,.25);
+      transition: border-color 160ms ease, background 160ms ease;
+    }
+    .composer:focus-within { border-color: #5a5a5a; background: #242424; }
+    .composer .icon-button { width: 40px; height: 40px; }
+    .composer textarea {
+      width: 100%;
+      min-height: 42px;
+      max-height: 130px;
+      resize: none;
+      overflow: auto;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: var(--text);
+      line-height: 1.42;
+      padding: 10px 0 8px;
+    }
+    .composer textarea::placeholder { color: #9b9b9b; }
+    .risk-select {
+      height: 40px;
+      padding: 0 8px;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+    }
+    .risk-select option { background: var(--surface); color: var(--text); }
+    .voice-button { position: relative; overflow: hidden; }
+    .voice-bars { height: 18px; display: flex; align-items: center; gap: 2px; }
+    .voice-bars i { width: 2px; height: 6px; border-radius: 2px; background: currentColor; animation: voice 900ms ease-in-out infinite; }
+    .voice-bars i:nth-child(2) { animation-delay: -720ms; }
+    .voice-bars i:nth-child(3) { animation-delay: -520ms; }
+    .voice-bars i:nth-child(4) { animation-delay: -300ms; }
+    .voice-bars i:nth-child(5) { animation-delay: -620ms; }
+    @keyframes voice { 50% { height: 17px; } }
+
+    .primary-button {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border: 0;
+      border-radius: 50%;
+      background: var(--text);
+      color: #050505;
+      cursor: pointer;
+      transition: background 150ms ease, color 150ms ease;
+    }
+    .primary-button:hover { background: #dcdcdc; }
+    .primary-button:disabled { background: #3b3b3b; color: #777; cursor: wait; }
+
+    .quick-actions {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px 26px;
+      margin-top: 34px;
+      animation: heroIn 820ms 620ms var(--ease-out) both;
+    }
+    .quick-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 0;
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: color 150ms ease;
+    }
+    .quick-action:hover { color: var(--text); }
+    .quick-action svg { width: 19px; height: 19px; }
+
+    .hero-note {
+      margin: 29px auto 0;
+      color: #737373;
+      font-size: 12px;
+      animation: heroIn 820ms 760ms var(--ease-out) both;
+    }
+
+    .run-panel {
+      display: none;
+      margin-top: 14px;
+      border: 1px solid var(--line-strong);
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--surface-3);
+      text-align: left;
+      box-shadow: 0 18px 60px rgba(0,0,0,.4);
+    }
+    .run-panel.is-open { display: block; animation: runOpen 520ms var(--ease-out) both; }
+    @keyframes runOpen {
+      from { opacity: 0; clip-path: inset(0 0 100% 0 round 12px); transform: translateY(-8px); }
+      to { opacity: 1; clip-path: inset(0 0 0 0 round 12px); transform: translateY(0); }
+    }
+    .run-head {
+      min-height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 0 15px;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .run-head strong { color: var(--text); font-weight: 560; }
+    .run-body { display: grid; grid-template-columns: 220px 1fr; min-height: 220px; }
+    .run-steps { padding: 14px; border-right: 1px solid var(--line); }
+    .run-step {
+      position: relative;
+      display: grid;
+      grid-template-columns: 18px 1fr;
+      gap: 9px;
+      align-items: center;
+      min-height: 38px;
+      color: #727272;
+      font-size: 13px;
+    }
+    .run-step::after {
+      content: "";
+      position: absolute;
+      left: 8px;
+      top: 28px;
+      bottom: -8px;
+      width: 1px;
+      background: var(--line);
+    }
+    .run-step:last-child::after { display: none; }
+    .step-dot {
+      position: relative;
+      z-index: 1;
+      width: 17px;
+      height: 17px;
+      display: grid;
+      place-items: center;
+      border: 1px solid #474747;
+      border-radius: 50%;
+      background: var(--surface-3);
+      font-size: 9px;
+    }
+    .run-step.is-active { color: var(--text); }
+    .run-step.is-active .step-dot { border-color: var(--text); animation: stepPulse 900ms ease-in-out infinite; }
+    .run-step.is-done { color: var(--muted); }
+    .run-step.is-done .step-dot { border-color: var(--positive); color: var(--positive); }
+    @keyframes stepPulse { 50% { box-shadow: 0 0 0 4px rgba(255,255,255,.08); } }
+    .run-output { position: relative; padding: 20px 22px 22px; overflow: hidden; }
+    .output-kicker { color: var(--muted); font-size: 12px; }
+    .run-output h2 { margin: 7px 0 8px; font-size: 21px; line-height: 1.2; letter-spacing: -.02em; font-weight: 560; }
+    .run-output p { margin: 0; color: var(--muted); font-size: 14px; }
+    .compiled-rule {
+      display: grid;
+      grid-template-columns: 90px 1fr;
+      gap: 12px;
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+      font: 12px/1.55 var(--mono);
+    }
+    .compiled-rule span:first-child { color: var(--faint); }
+    .compiled-rule span:last-child { color: #d7d7d7; }
+    .run-again {
+      margin-top: 17px;
+      padding: 8px 12px;
+      border: 1px solid var(--line-strong);
+      border-radius: 8px;
+      background: transparent;
+      color: var(--text);
+      cursor: pointer;
+    }
+    .scan-line {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 1px;
+      top: 0;
+      background: rgba(255,255,255,.18);
+      animation: scan 2.4s linear infinite;
+    }
+    @keyframes scan { to { transform: translateY(220px); } }
+
+    .content {
+      position: relative;
+      border-top: 1px solid var(--line);
+      background: #030303;
+    }
+    .section {
+      width: min(1180px, calc(100% - 64px));
+      margin: 0 auto;
+      padding: 126px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .section:last-child { border-bottom: 0; }
+    .section-heading {
+      display: grid;
+      grid-template-columns: minmax(0, .8fr) minmax(280px, 1fr);
+      gap: 70px;
+      align-items: start;
+      margin-bottom: 70px;
+    }
+    .section h2 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4.4vw, 4.4rem);
+      line-height: .98;
+      letter-spacing: -.045em;
+      font-weight: 520;
+      text-wrap: balance;
+    }
+    .section-heading p {
+      max-width: 56ch;
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.55;
+    }
+
+    [data-reveal] {
+      opacity: 0;
+      transform: translateY(28px);
+      filter: blur(8px);
+      transition: opacity 800ms var(--ease-out), transform 800ms var(--ease-out), filter 800ms var(--ease-out);
+    }
+    [data-reveal].is-visible { opacity: 1; transform: translateY(0); filter: blur(0); }
+
+    .conversation-demo {
+      display: grid;
+      grid-template-columns: minmax(0, .8fr) minmax(400px, 1.25fr);
+      gap: 0;
+      border: 1px solid var(--line-strong);
+      background: #090909;
+      overflow: hidden;
+    }
+    .conversation {
+      min-height: 520px;
+      padding: 26px;
+      border-right: 1px solid var(--line);
+      background: #0b0b0b;
+    }
+    .message { margin: 0 0 26px; }
+    .message-name { margin-bottom: 7px; color: var(--muted); font-size: 13px; }
+    .message p { margin: 0; max-width: 38ch; font-size: 16px; }
+    .message.bot p { color: #dedede; }
+    .message.typing p::after { content: "▋"; animation: blink 700ms steps(1) infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+    .rule-list { margin: 16px 0 0; padding: 0; list-style: none; border-top: 1px solid var(--line); }
+    .rule-list li {
+      display: grid;
+      grid-template-columns: 70px 1fr;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 13px;
+    }
+    .rule-list strong { color: var(--faint); font-weight: 500; }
+    .rule-list span { color: #d8d8d8; }
+
+    .chart-stage {
+      position: relative;
+      min-height: 520px;
+      padding: 22px 22px 18px;
+      overflow: hidden;
+    }
+    .chart-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--line);
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .chart-toolbar strong { color: var(--text); font-weight: 600; }
+    .chart {
+      position: relative;
+      height: 330px;
+      margin-top: 24px;
+      border-bottom: 1px solid var(--line);
+      background-image:
+        linear-gradient(var(--line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line) 1px, transparent 1px);
+      background-size: 100% 64px, 76px 100%;
+      overflow: hidden;
+    }
+    .candles { position: absolute; inset: 22px 14px 20px; display: flex; align-items: end; gap: 9px; }
+    .candle { position: relative; flex: 1; min-width: 5px; height: var(--h); animation: candleIn 760ms var(--ease-out) both; animation-delay: calc(var(--i) * 48ms); }
+    .candle::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: -18%;
+      bottom: -18%;
+      width: 1px;
+      background: currentColor;
+      transform: translateX(-50%);
+    }
+    .candle::after {
+      content: "";
+      position: absolute;
+      inset: 0 16%;
+      background: currentColor;
+    }
+    .candle.up { color: var(--positive); }
+    .candle.down { color: var(--negative); }
+    @keyframes candleIn {
+      from { opacity: 0; transform: scaleY(.08); transform-origin: bottom; }
+      to { opacity: .9; transform: scaleY(1); transform-origin: bottom; }
+    }
+    .entry-line,
+    .stop-line {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 1px;
+      transform: scaleX(0);
+      transform-origin: left;
+      animation: lineGrow 1100ms var(--ease-out) forwards;
+    }
+    .entry-line { top: 46%; background: var(--positive); animation-delay: 1.3s; }
+    .stop-line { top: 67%; background: var(--negative); animation-delay: 1.55s; }
+    @keyframes lineGrow { to { transform: scaleX(1); } }
+    .chart-label {
+      position: absolute;
+      right: 8px;
+      padding: 3px 6px;
+      border-radius: 5px;
+      background: #0b0b0b;
+      font: 10px/1.2 var(--mono);
+    }
+    .chart-label.entry { top: calc(46% - 12px); color: var(--positive); }
+    .chart-label.stop { top: calc(67% - 12px); color: var(--negative); }
+    .chart-caption { display: flex; justify-content: space-between; gap: 20px; margin-top: 17px; color: var(--muted); font-size: 12px; }
+
+    .risk-table { border-top: 1px solid var(--line-strong); }
+    .risk-row {
+      display: grid;
+      grid-template-columns: minmax(160px, .7fr) minmax(260px, 1.35fr) minmax(110px, .45fr);
+      gap: 26px;
+      align-items: center;
+      min-height: 86px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--line);
+      transition: background 180ms ease;
+    }
+    .risk-row:hover { background: #080808; }
+    .risk-name { font-size: 17px; font-weight: 600; }
+    .risk-copy { color: var(--muted); }
+    .risk-state { justify-self: end; font: 12px/1.3 var(--mono); }
+    .risk-state.pass { color: var(--positive); }
+    .risk-state.block { color: var(--negative); }
+    .risk-state.watch { color: var(--warning); }
+
+    .packet-line {
+      position: relative;
+      height: 90px;
+      margin-top: 50px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      overflow: hidden;
+    }
+    .packet-line::before {
+      content: "BUILD  →  VALIDATE  →  SIZE  →  PAPER  →  MONITOR";
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      color: #5c5c5c;
+      font: 12px/1 var(--mono);
+      letter-spacing: .08em;
+    }
+    .packet {
+      position: absolute;
+      top: 31px;
+      left: -70px;
+      width: 58px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border: 1px solid #818181;
+      border-radius: 6px;
+      background: #0b0b0b;
+      font: 10px/1 var(--mono);
+      animation: packetMove 7s linear infinite;
+    }
+    .packet:nth-child(2) { animation-delay: -2.2s; }
+    .packet:nth-child(3) { animation-delay: -4.6s; }
+    @keyframes packetMove { to { left: calc(100% + 70px); } }
+
+    .inspect-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(300px, .8fr);
+      border: 1px solid var(--line-strong);
+      background: #070707;
+    }
+    .log-console { min-height: 500px; padding: 20px; border-right: 1px solid var(--line); font: 12px/1.7 var(--mono); }
+    .log-head { display: flex; justify-content: space-between; padding-bottom: 14px; border-bottom: 1px solid var(--line); color: var(--muted); }
+    .log-lines { margin-top: 14px; }
+    .log-line { display: grid; grid-template-columns: 78px 70px 1fr; gap: 10px; padding: 4px 0; color: #c8c8c8; animation: logIn 480ms var(--ease-out) both; animation-delay: calc(var(--i) * 90ms); }
+    .log-line time { color: #666; }
+    .log-line .ok { color: var(--positive); }
+    .log-line .warn { color: var(--warning); }
+    .log-line .halt { color: var(--negative); }
+    @keyframes logIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+
+    .order-book { padding: 20px; }
+    .book-head { display: flex; justify-content: space-between; padding-bottom: 14px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 13px; }
+    .book-columns,
+    .book-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; text-align: right; font: 11px/1.5 var(--mono); }
+    .book-columns { margin-top: 14px; color: #666; }
+    .book-row { position: relative; padding: 6px 0; }
+    .book-row::before { content: ""; position: absolute; right: 0; top: 4px; bottom: 4px; width: var(--depth); background: rgba(255,255,255,.035); transform-origin: right; animation: depthPulse 2.8s ease-in-out infinite; }
+    .book-row.ask .price { color: var(--negative); }
+    .book-row.bid .price { color: var(--positive); }
+    @keyframes depthPulse { 50% { transform: scaleX(.84); } }
+    .book-spread { margin: 13px 0; padding: 10px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); color: var(--muted); text-align: center; font: 11px/1 var(--mono); }
+
+    .final-cta { text-align: center; padding-bottom: 154px; }
+    .final-cta h2 { max-width: 920px; margin: 0 auto; }
+    .final-cta p { max-width: 600px; margin: 24px auto 0; color: var(--muted); font-size: 18px; }
+    .email-form {
+      width: min(620px, 100%);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      margin: 34px auto 0;
+      padding: 7px;
+      border: 1px solid var(--line-strong);
+      border-radius: 12px;
+      background: var(--surface);
+    }
+    .email-form input {
+      min-width: 0;
+      height: 46px;
+      padding: 0 14px;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: var(--text);
+    }
+    .email-form button {
+      min-width: 148px;
+      height: 46px;
+      border: 0;
+      border-radius: 8px;
+      background: var(--text);
+      color: #050505;
+      font-weight: 650;
+      cursor: pointer;
+    }
+    .form-status { min-height: 22px; margin-top: 12px; color: var(--positive); font-size: 13px; }
+
+    .site-footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 28px 32px 52px;
+      border-top: 1px solid var(--line);
+      color: var(--faint);
+      font-size: 12px;
+    }
+    .footer-links { display: flex; gap: 20px; }
+    .footer-link { text-decoration: none; }
+    .footer-link:hover { color: var(--text); }
+
+    .scrim {
+      position: fixed;
+      inset: 0;
+      z-index: 45;
+      display: none;
+      background: rgba(0,0,0,.72);
+      opacity: 0;
+      transition: opacity 200ms ease;
+    }
+
+    @media (max-width: 980px) {
+      :root { --rail-width: 0px; }
+      .sidebar { width: 272px; transform: translateX(-100%); }
+      .sidebar.is-open { transform: translateX(0); }
+      .scrim { display: block; pointer-events: none; }
+      .scrim.is-open { opacity: 1; pointer-events: auto; }
+      .main { margin-left: 0; }
+      .topbar { left: 0; grid-template-columns: 1fr auto 1fr; }
+      .mobile-menu { display: inline-grid; }
+      .market-rail { left: 0; }
+      .conversation-demo,
+      .inspect-grid { grid-template-columns: 1fr; }
+      .conversation,
+      .log-console { border-right: 0; border-bottom: 1px solid var(--line); }
+      .section-heading { grid-template-columns: 1fr; gap: 26px; }
+      .section-heading p { margin-top: 0; }
+    }
+
+    @media (max-width: 720px) {
+      .topbar { padding-inline: 10px; }
+      .mode-switch { min-width: 190px; }
+      .top-status { display: none; }
+      .hero { padding: 104px 14px 64px; }
+      .hero h1 { font-size: 2rem; }
+      .hero-subtitle { font-size: 15px; }
+      .composer { grid-template-columns: 38px 1fr auto; gap: 4px; border-radius: 19px; }
+      .risk-select { display: none; }
+      .voice-button { display: none; }
+      .quick-actions { gap: 7px 18px; margin-top: 24px; }
+      .quick-action { font-size: 13px; }
+      .run-body { grid-template-columns: 1fr; }
+      .run-steps { display: grid; grid-template-columns: repeat(4, 1fr); border-right: 0; border-bottom: 1px solid var(--line); padding: 10px; }
+      .run-step { grid-template-columns: 1fr; justify-items: center; gap: 5px; text-align: center; font-size: 10px; }
+      .run-step::after { left: 55%; right: -45%; top: 8px; width: auto; height: 1px; bottom: auto; }
+      .section { width: min(100% - 28px, 1180px); padding: 88px 0; }
+      .section-heading { margin-bottom: 44px; }
+      .section h2 { font-size: clamp(2.2rem, 11vw, 3.4rem); }
+      .section-heading p { font-size: 16px; }
+      .conversation,
+      .chart-stage { min-height: auto; padding: 18px; }
+      .chart { height: 280px; }
+      .risk-row { grid-template-columns: 1fr auto; gap: 8px 20px; padding: 18px 0; }
+      .risk-copy { grid-column: 1 / -1; }
+      .inspect-grid { border-inline: 0; }
+      .log-console,
+      .order-book { padding: 16px; }
+      .log-line { grid-template-columns: 64px 55px 1fr; gap: 6px; font-size: 10px; }
+      .email-form { grid-template-columns: 1fr; border-radius: 10px; }
+      .email-form button { width: 100%; }
+      .site-footer { flex-direction: column; padding-inline: 18px; }
+      .market-rail { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .001ms !important;
+      }
+      [data-reveal] { opacity: 1; transform: none; filter: none; }
+    }
+
+
+    /* UselessExpensive Software launch motion system */
+    #site-field {
+      position: fixed;
+      inset: 0 0 0 var(--rail-width);
+      z-index: -1;
+      width: calc(100vw - var(--rail-width));
+      height: 100vh;
+      pointer-events: none;
+      opacity: .8;
+    }
+    .scroll-progress {
+      position: fixed;
+      z-index: 200;
+      top: 0;
+      left: var(--rail-width);
+      right: 0;
+      height: 2px;
+      background: #111;
+      pointer-events: none;
+    }
+    .scroll-progress i { display: block; width: 0; height: 100%; background: #f2f2f2; box-shadow: 0 0 18px rgba(255,255,255,.25); }
+    .cursor-orbit {
+      position: fixed;
+      z-index: 150;
+      width: 34px;
+      height: 34px;
+      margin: -17px 0 0 -17px;
+      border: 1px solid rgba(255,255,255,.24);
+      border-radius: 50%;
+      pointer-events: none;
+      opacity: 0;
+      transition: width .22s var(--ease-out), height .22s var(--ease-out), margin .22s var(--ease-out), border-color .18s ease, opacity .18s ease;
+      mix-blend-mode: difference;
+    }
+    .cursor-orbit::before, .cursor-orbit::after { content:""; position:absolute; background:#fff; opacity:.55; }
+    .cursor-orbit::before { width:6px; height:1px; left:13px; top:16px; }
+    .cursor-orbit::after { width:1px; height:6px; left:16px; top:13px; }
+    .cursor-orbit.hot { width: 60px; height: 60px; margin: -30px 0 0 -30px; border-color: rgba(255,255,255,.55); }
+    .chart { cursor: crosshair; }
+    .chart-scan {
+      position: absolute;
+      z-index: 5;
+      top: 0;
+      bottom: 0;
+      width: 90px;
+      left: -100px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.07));
+      border-right: 1px solid rgba(255,255,255,.13);
+      animation: chartSweep 7s linear infinite;
+      pointer-events: none;
+    }
+    @keyframes chartSweep { to { transform: translateX(calc(100vw + 280px)); } }
+    .live-price-line {
+      position: absolute;
+      z-index: 7;
+      left: 0;
+      right: 0;
+      top: 42%;
+      height: 1px;
+      background: repeating-linear-gradient(90deg, rgba(255,255,255,.82) 0 5px, transparent 5px 10px);
+      animation: dashMove .55s linear infinite;
+      pointer-events: none;
+      transition: top 1.1s var(--ease-out);
+    }
+    @keyframes dashMove { to { background-position: -10px 0; } }
+    .live-price-line span {
+      position: absolute;
+      right: 0;
+      top: -11px;
+      min-width: 64px;
+      padding: 3px 7px;
+      background: #f2f2f2;
+      color: #050505;
+      font: 700 10px/16px var(--mono);
+      text-align: right;
+    }
+    .chart-crosshair { position: absolute; inset: 0; z-index: 20; opacity: 0; pointer-events: none; transition: opacity .12s ease; }
+    .chart-crosshair.is-active { opacity: 1; }
+    .chart-crosshair .crosshair-x, .chart-crosshair .crosshair-y { position: absolute; display: block; }
+    .chart-crosshair .crosshair-x { top: 0; bottom: 0; width: 1px; background: repeating-linear-gradient(0deg, rgba(255,255,255,.7) 0 3px, transparent 3px 8px); animation: dashY .45s linear infinite; }
+    .chart-crosshair .crosshair-y { left: 0; right: 0; height: 1px; background: repeating-linear-gradient(90deg, rgba(255,255,255,.7) 0 3px, transparent 3px 8px); animation: dashMove .45s linear infinite; }
+    @keyframes dashY { to { background-position: 0 -8px; } }
+    .chart-crosshair b { position:absolute; width:8px; height:8px; margin:-4px; border:2px solid #fff; border-radius:50%; background:#050505; }
+    .cursor-price, .cursor-time { position:absolute; padding:3px 7px; background:#111; border:1px solid #555; color:#fff; font:700 10px/16px var(--mono); white-space:nowrap; }
+    .cursor-price { right:0; transform:translateY(-50%); }
+    .cursor-time { bottom:0; transform:translate(-50%, 100%); }
+    [data-reveal].is-visible .section-heading h2, .section-heading.is-visible h2 { animation: headingSignal .75s var(--ease-out) both; }
+    @keyframes headingSignal { from { opacity:0; filter:blur(12px); letter-spacing:.03em; } to { opacity:1; filter:blur(0); letter-spacing:-.035em; } }
+    .conversation-demo, .risk-table, .inspect-grid { --spot-x: 50%; --spot-y: 50%; position:relative; }
+    .conversation-demo::after, .risk-table::after, .inspect-grid::after {
+      content:""; position:absolute; inset:0; pointer-events:none; opacity:0; transition:opacity .2s ease;
+      background: radial-gradient(280px circle at var(--spot-x) var(--spot-y), rgba(255,255,255,.055), transparent 68%);
+    }
+    .conversation-demo:hover::after, .risk-table:hover::after, .inspect-grid:hover::after { opacity:1; }
+    .packet { animation: packetDrift 2.6s var(--ease-out) infinite alternate; animation-delay: calc(var(--packet, 0) * 180ms); }
+    .packet:nth-child(2) { --packet:1; } .packet:nth-child(3) { --packet:2; }
+    @keyframes packetDrift { to { filter: brightness(1.6); letter-spacing:.08em; } }
+    .site-footer::before { content:"USELESSEXPENSIVE SOFTWARE"; position:absolute; left:0; bottom:38px; font-size:clamp(34px,7vw,120px); font-weight:900; letter-spacing:-.065em; color:rgba(255,255,255,.022); pointer-events:none; white-space:nowrap; }
+    .site-footer { position:relative; overflow:hidden; min-height:140px; align-items:flex-end; }
+    @media (max-width: 760px) {
+      #site-field { left:0; width:100vw; }
+      .scroll-progress { left:0; }
+      .cursor-orbit { display:none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .chart-scan, .live-price-line, .chart-crosshair .crosshair-x, .chart-crosshair .crosshair-y, .packet { animation:none !important; }
+    }
+
+  
+
+    /* Commerce and consistency pass — UselessExpensive Software */
+    :where(.main, .content, .section, .section-heading, .conversation-demo, .inspect-grid, .run-body, .run-output, .chart-stage, .pricing-grid, .checkout-shell, .checkout-column, .plan, .feature-row, .payment-slab, .receipt-form, .field-row, .field) { min-width: 0; }
+    :where(p, li, code, strong, span, button, input, textarea, select) { overflow-wrap: anywhere; }
+    button { max-width: 100%; }
+    .topbar { min-width: 0; }
+    .top-status span:first-child { white-space: nowrap; }
+    .chart-toolbar > *, .chart-caption > *, .book-head > *, .log-head > * { min-width: 0; }
+    .chart-toolbar span:first-child, .chart-caption span, .log-line span:last-child { overflow-wrap: anywhere; }
+    .conversation-demo, .inspect-grid, .pricing-grid, .checkout-shell { contain: layout paint; }
+
+    .pricing-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin: -34px 0 34px;
+      padding: 16px 0;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .pricing-meta strong { color: var(--text); font-weight: 620; }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      border-top: 1px solid var(--line-strong);
+      border-bottom: 1px solid var(--line-strong);
+    }
+    .plan {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      min-height: 490px;
+      padding: 30px 26px 26px;
+      border-right: 1px solid var(--line);
+      background: #050505;
+      isolation: isolate;
+      overflow: hidden;
+      transition: background 180ms ease;
+    }
+    .plan:last-child { border-right: 0; }
+    .plan::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(115deg, transparent 0 48%, rgba(255,255,255,.035) 50%, transparent 52%);
+      transform: translateX(-100%);
+      animation: planScan 8s linear infinite;
+      animation-delay: calc(var(--plan-index) * -2.2s);
+    }
+    @keyframes planScan { to { transform: translateX(100%); } }
+    .plan:hover, .plan.is-selected { background: #0a0a0a; }
+    .plan.is-selected { box-shadow: inset 0 2px 0 var(--text); }
+    .plan-name { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+    .plan-name h3 { margin: 0; font: 620 22px/1.15 var(--font-display); letter-spacing: -.03em; }
+    .plan-name span { color: var(--faint); font: 11px/1.4 var(--mono); }
+    .plan-price { display: flex; align-items: baseline; gap: 8px; margin-top: 30px; }
+    .plan-price strong { font: 560 clamp(2.8rem, 4vw, 4.6rem)/.9 var(--font-display); letter-spacing: -.055em; }
+    .plan-price span { max-width: 88px; color: var(--muted); font-size: 13px; line-height: 1.25; }
+    .plan-copy { min-height: 66px; margin: 22px 0 0; color: var(--muted); font-size: 14px; }
+    .plan-features { display: grid; gap: 0; margin: 22px 0 28px; padding: 0; list-style: none; border-top: 1px solid var(--line); }
+    .plan-features li { display: grid; grid-template-columns: 16px minmax(0,1fr); gap: 10px; padding: 11px 0; border-bottom: 1px solid var(--line); color: #d8d8d8; font-size: 13px; }
+    .plan-features li::before { content: "✓"; color: var(--positive); font: 11px/1.5 var(--mono); }
+    .plan-button, .checkout-button, .copy-control, .packet-button {
+      min-height: 44px;
+      border: 1px solid var(--line-strong);
+      border-radius: 8px;
+      background: transparent;
+      color: var(--text);
+      font-weight: 620;
+      cursor: pointer;
+      transition: background 160ms ease, color 160ms ease, border-color 160ms ease;
+    }
+    .plan-button { width: 100%; margin-top: auto; }
+    .plan-button:hover, .copy-control:hover, .packet-button:hover { border-color: #777; background: #141414; }
+    .plan.is-selected .plan-button, .checkout-button { border-color: var(--text); background: var(--text); color: #050505; }
+    .checkout-button:hover { background: #dcdcdc; }
+
+    .feature-matrix { margin-top: 46px; border-top: 1px solid var(--line-strong); }
+    .feature-row { display: grid; grid-template-columns: minmax(180px,1.2fr) repeat(3,minmax(90px,.45fr)); gap: 16px; align-items: center; min-height: 58px; border-bottom: 1px solid var(--line); font-size: 13px; }
+    .feature-row > span:not(:first-child) { text-align: center; color: var(--muted); font-family: var(--mono); }
+    .feature-row.header { min-height: 48px; color: var(--faint); font-size: 11px; }
+    .feature-row.header > span:not(:first-child) { color: var(--faint); }
+    .feature-row .yes { color: var(--positive) !important; }
+
+    .checkout-shell {
+      display: grid;
+      grid-template-columns: minmax(0,.92fr) minmax(0,1.08fr);
+      border: 1px solid var(--line-strong);
+      background: #060606;
+    }
+    .checkout-column { padding: 28px; }
+    .checkout-column + .checkout-column { border-left: 1px solid var(--line); }
+    .checkout-head { display: flex; justify-content: space-between; gap: 18px; align-items: start; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
+    .checkout-head h3 { margin: 0; font: 620 22px/1.15 var(--font-display); letter-spacing: -.03em; }
+    .checkout-head span { color: var(--muted); font-size: 12px; text-align: right; }
+    .field-row { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; margin-top: 18px; }
+    .field { display: grid; gap: 8px; }
+    .field.full { grid-column: 1 / -1; }
+    .field label, .field > span { color: var(--muted); font-size: 12px; }
+    .field input, .field textarea, .field select {
+      width: 100%;
+      min-width: 0;
+      border: 1px solid var(--line-strong);
+      border-radius: 8px;
+      background: #0b0b0b;
+      color: var(--text);
+      outline: 0;
+      padding: 11px 12px;
+      transition: border-color 150ms ease, background 150ms ease;
+    }
+    .field input, .field select { min-height: 44px; }
+    .field textarea { min-height: 96px; resize: vertical; line-height: 1.45; }
+    .field input:focus, .field textarea:focus, .field select:focus { border-color: #777; background: #101010; }
+    .field input[type="file"] { padding: 8px; }
+    .field-help { color: var(--faint); font-size: 11px; line-height: 1.45; }
+
+    .price-readout { margin-top: 22px; padding: 22px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .price-readout > span { color: var(--muted); font-size: 12px; }
+    .price-readout strong { display: block; margin-top: 5px; font: 560 clamp(2.5rem,5vw,4.8rem)/.95 var(--font-display); letter-spacing: -.055em; }
+    .price-readout p { margin: 10px 0 0; color: var(--faint); font-size: 12px; }
+
+    .payment-slab { margin-top: 18px; border-top: 1px solid var(--line); }
+    .payment-row { display: grid; grid-template-columns: 116px minmax(0,1fr) auto; gap: 14px; align-items: center; min-height: 62px; border-bottom: 1px solid var(--line); }
+    .payment-row > span { color: var(--faint); font-size: 11px; text-transform: uppercase; letter-spacing: .05em; }
+    .payment-row strong, .payment-row code { min-width: 0; color: #e8e8e8; font: 600 12px/1.55 var(--mono); }
+    .payment-row strong { word-break: normal; overflow-wrap: normal; }
+    .payment-row code { word-break: break-all; overflow-wrap: anywhere; }
+    .copy-control { min-height: 34px; padding: 0 10px; font-size: 11px; }
+    .payment-warning { margin: 16px 0 0; padding: 13px 14px; border: 1px solid #62572c; background: #161407; color: #f0dfa0; font-size: 12px; line-height: 1.5; }
+    .receipt-form { margin-top: 26px; }
+    .receipt-form .field-row { grid-template-columns: 1fr; }
+    .receipt-form .field.full { grid-column: auto; }
+    .receipt-form .checkout-button { width: 100%; margin-top: 18px; }
+    .consent { display: grid; grid-template-columns: 18px minmax(0,1fr); gap: 10px; align-items: start; margin-top: 16px; color: var(--muted); font-size: 12px; }
+    .consent input { margin: 2px 0 0; }
+    .purchase-status { min-height: 24px; margin-top: 14px; color: var(--positive); font-size: 12px; }
+    .purchase-status.error { color: var(--negative); }
+    .purchase-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+    .packet-button { min-height: 40px; font-size: 12px; }
+
+    .legal-strip { display: grid; grid-template-columns: 1fr; gap: 0; margin-top: 34px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .legal-strip div { padding: 15px 0; border-bottom: 1px solid var(--line); }
+    .legal-strip div:last-child { border-bottom: 0; }
+    .legal-strip strong { display: block; font-size: 13px; }
+    .legal-strip span { display: block; margin-top: 6px; color: var(--muted); font-size: 12px; }
+
+    @media (max-width: 1380px) {
+      .checkout-shell { grid-template-columns: 1fr; }
+      .checkout-column + .checkout-column { border-left: 0; border-top: 1px solid var(--line); }
+    }
+    @media (max-width: 1120px) {
+      .pricing-grid { grid-template-columns: 1fr; }
+      .plan { min-height: auto; border-right: 0; border-bottom: 1px solid var(--line); }
+      .plan:last-child { border-bottom: 0; }
+      .plan-copy { min-height: 0; }
+    }
+    @media (max-width: 720px) {
+      .pricing-meta { align-items: start; flex-direction: column; margin-top: -18px; }
+      .feature-matrix { overflow-x: auto; scrollbar-width: thin; }
+      .feature-row { min-width: 640px; }
+      .checkout-column { padding: 20px 16px; }
+      .field-row { grid-template-columns: 1fr; }
+      .field.full { grid-column: auto; }
+      .payment-row { grid-template-columns: 86px minmax(0,1fr); gap: 10px; padding: 10px 0; }
+      .payment-row .copy-control { grid-column: 2; justify-self: start; }
+      .purchase-actions, .legal-strip { grid-template-columns: 1fr; }
+      .legal-strip div { border-right: 0; border-bottom: 1px solid var(--line); }
+      .legal-strip div:last-child { border-bottom: 0; }
+      .checkout-head { flex-direction: column; }
+      .checkout-head span { text-align: left; }
+    }
+    @media (max-width: 460px) {
+      .hero { padding-inline: 10px; }
+      .composer { grid-template-columns: 36px minmax(0,1fr) 42px; padding-left: 6px; }
+      .composer .icon-button { width: 36px; }
+      .run-head { align-items: start; flex-direction: column; padding-block: 12px; }
+      .compiled-rule { grid-template-columns: 1fr; gap: 4px; }
+      .risk-row { grid-template-columns: 1fr; }
+      .risk-state { justify-self: start; }
+      .plan { padding-inline: 18px; }
+      .site-footer { gap: 16px; }
+      .footer-links { flex-wrap: wrap; }
+    }
+
+  </style>
+</head>
+<body><canvas id="site-field" width="1600" height="900" aria-hidden="true"></canvas><div class="scroll-progress" aria-hidden="true"><i id="scroll-progress-bar"></i></div><div class="cursor-orbit" id="cursor-orbit" aria-hidden="true"></div>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="market-rail top" aria-hidden="true">
+    <div class="market-rail-track" id="tickerTop"></div>
+  </div>
+  <div class="market-rail bottom" aria-hidden="true">
+    <div class="market-rail-track" id="tickerBottom"></div>
+  </div>
+
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Primary navigation">
+      <div class="sidebar-head">
+        <a class="brand" href="#home" aria-label="TradingBot 3000 home">
+          <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span>TradingBot 3000</span>
+        </a>
+        <button class="icon-button" id="sidebarSearch" type="button" aria-label="Focus strategy prompt">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg>
+        </button>
+      </div>
+
+      <div class="sidebar-scroll">
+        <nav class="nav-stack">
+          <button class="nav-item is-active" style="--i:0" type="button" data-prompt="Build a rule-based strategy for a liquid market using a 20/50 moving-average cross.">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"></path></svg>
+            <span>New strategy</span>
+          </button>
+          <a class="nav-item" style="--i:1" href="#build">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 5h16v14H4z"></path><path d="M8 9h8M8 13h5"></path></svg>
+            <span>Strategies</span>
+          </a>
+          <a class="nav-item" style="--i:2" href="#risk">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 17 9 12l3 3 7-8"></path><path d="M19 7h-5"></path></svg>
+            <span>Risk gates</span>
+          </a>
+          <a class="nav-item" style="--i:3" href="#inspect">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
+            <span>Audit trail</span>
+          </a>
+          <a class="nav-item" style="--i:4" href="#pricing">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M5 7h14M5 12h14M5 17h9"></path><path d="M18 15v6M15 18h6"></path></svg>
+            <span>Plans & pricing</span>
+          </a>
+          <a class="nav-item" style="--i:5" href="#purchase">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 7h16v12H4z"></path><path d="M4 10h16M8 15h4"></path></svg>
+            <span>Buy with USDT</span>
+          </a>
+        </nav>
+
+        <section class="sidebar-section" aria-labelledby="recent-title">
+          <h2 id="recent-title">Recent runs</h2>
+          <div class="recent-list">
+            <a class="recent-item" href="#build">EUR/USD London breakout</a>
+            <a class="recent-item" href="#risk">BTC volatility guard</a>
+            <a class="recent-item" href="#inspect">SPY pullback paper run</a>
+            <a class="recent-item" href="#build">Gold trend-follow test</a>
+            <a class="recent-item" href="#inspect">Risk cap review</a>
+            <a class="recent-item" href="#build">Close-before-news rule</a>
+          </div>
+        </section>
+      </div>
+
+      <div class="sidebar-foot">
+        <a class="account" href="#purchase">
+          <span class="avatar">TB</span>
+          <span><strong>Research workspace</strong><span>Licensed desktop software</span></span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 10h16v10H4z"></path><path d="M8 10V6a4 4 0 0 1 8 0v4"></path></svg>
+        </a>
+      </div>
+    </aside>
+
+    <div class="scrim" id="scrim" aria-hidden="true"></div>
+
+    <main class="main" id="main">
+      <header class="topbar">
+        <button class="icon-button mobile-menu" id="mobileMenu" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M5 7h14M5 12h14M5 17h14"></path></svg>
+        </button>
+        <div class="mode-switch" role="tablist" aria-label="Workspace mode">
+          <button class="mode-button" role="tab" aria-selected="true" data-mode="Build" type="button">Build</button>
+          <button class="mode-button" role="tab" aria-selected="false" data-mode="Watch" type="button">Watch</button>
+        </div>
+        <div class="top-status"><span>Research only</span><span class="status-orbit" aria-hidden="true"></span></div>
+      </header>
+
+      <section class="hero" id="home" aria-labelledby="hero-title">
+        <div class="hero-grid" aria-hidden="true"></div>
+        <svg class="hero-ghost-chart" viewBox="0 0 1400 360" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M0 290 C80 280 120 250 185 258 S300 310 350 250 S430 170 500 195 S600 290 680 245 S760 110 840 145 S910 235 980 185 S1080 75 1150 118 S1240 210 1400 92" />
+        </svg>
+
+        <div class="hero-inner">
+          <h1 id="hero-title"><span class="word" style="--word:0">What</span> <span class="word" style="--word:1">should</span> <span class="word" style="--word:2">the</span> <span class="word" style="--word:3">market</span> <span class="word" style="--word:4">do</span> <span class="word" style="--word:5">today?</span></h1>
+          <p class="hero-subtitle">Describe the setup. TradingBot 3000 turns it into explicit research rules, live evidence, and visible risk gates—without routing an order.</p>
+
+          <div class="command-zone">
+            <form class="composer" id="strategyForm">
+              <button class="icon-button" type="button" aria-label="Add market context">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>
+              </button>
+              <textarea id="strategyInput" rows="1" aria-label="Describe a strategy" placeholder="Ask TradingBot 3000"></textarea>
+              <select class="risk-select" id="riskMode" aria-label="Risk mode">
+                <option>Guarded</option>
+                <option>Balanced</option>
+                <option>Custom</option>
+              </select>
+              <button class="icon-button voice-button" id="voicePreview" type="button" aria-label="Show voice input availability">
+                <span class="voice-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+              </button>
+              <button class="primary-button" id="submitStrategy" type="submit" aria-label="Build strategy">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 12 7-7 7 7"></path><path d="M12 19V5"></path></svg>
+              </button>
+            </form>
+
+            <div class="run-panel" id="runPanel" aria-live="polite">
+              <div class="run-head"><strong id="runTitle">Compiling strategy</strong><span id="runStatus">Working</span></div>
+              <div class="run-body">
+                <div class="run-steps" id="runSteps">
+                  <div class="run-step"><span class="step-dot">1</span><span>Parse idea</span></div>
+                  <div class="run-step"><span class="step-dot">2</span><span>Build rules</span></div>
+                  <div class="run-step"><span class="step-dot">3</span><span>Check risk</span></div>
+                  <div class="run-step"><span class="step-dot">4</span><span>Research-ready</span></div>
+                </div>
+                <div class="run-output">
+                  <div class="scan-line" aria-hidden="true"></div>
+                  <div class="output-kicker" id="outputKicker">Reading your setup</div>
+                  <h2 id="outputTitle">Turning the idea into conditions…</h2>
+                  <p id="outputText">Every assumption, threshold, horizon, and failure condition must be explicit before the result is trusted.</p>
+                  <div class="compiled-rule"><span>INPUT</span><span id="compiledInput">Waiting for strategy</span></div>
+                  <div class="compiled-rule"><span>RISK MODE</span><span id="compiledRisk">Guarded</span></div>
+                  <button class="run-again" id="runAgain" type="button" hidden>Build another</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="quick-actions" aria-label="Strategy examples">
+            <button class="quick-action" type="button" data-prompt="Build a conservative breakout strategy with a fixed stop and no overnight positions.">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 19V5"></path><path d="M4 15h4V9h4v7h4V6h4v13"></path></svg>
+              <span>Build a strategy</span>
+            </button>
+            <button class="quick-action" type="button" data-prompt="Backtest a 20/50 moving-average crossover with transaction costs and a volatility filter.">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"></path><path d="M3 4v6h6"></path><path d="m9 14 2-2 2 1 3-4"></path></svg>
+              <span>Backtest an idea</span>
+            </button>
+            <button class="quick-action" type="button" data-prompt="Review this strategy for concentration, gap, liquidity, and maximum-loss risk.">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 3 4 7v5c0 5 3.4 8.4 8 9 4.6-.6 8-4 8-9V7Z"></path><path d="m9 12 2 2 4-4"></path></svg>
+              <span>Check risk</span>
+            </button>
+          </div>
+          <p class="hero-note">Interactive product demonstration. Research-only software · prepaid plans · signed device-bound licenses · no order routing.</p>
+        </div>
+      </section>
+
+      <div class="content">
+        <section class="section" id="build">
+          <div class="section-heading" data-reveal>
+            <h2>Say the idea. Get the rules.</h2>
+            <p>TradingBot 3000 keeps the conversation plain while making the execution painfully specific. No vague “AI signal.” Every condition becomes something you can read, challenge, and change.</p>
+          </div>
+
+          <div class="conversation-demo" data-reveal>
+            <div class="conversation">
+              <div class="message user">
+                <div class="message-name">You</div>
+                <p>Buy a breakout only when volume confirms it. Never risk more than 0.5% and get out before major news.</p>
+              </div>
+              <div class="message bot typing">
+                <div class="message-name">TradingBot 3000</div>
+                <p>I’ll turn that into testable entry, size, exit, and calendar rules.</p>
+              </div>
+              <ul class="rule-list">
+                <li><strong>ENTRY</strong><span>Close above the 20-day high with volume ≥ 1.5× the 20-day average.</span></li>
+                <li><strong>SIZE</strong><span>Position size constrained so stop distance risks no more than 0.5%.</span></li>
+                <li><strong>EXIT</strong><span>Initial stop at 1.2× ATR; trail after price reaches +1R.</span></li>
+                <li><strong>PAUSE</strong><span>No new entries inside the configured event blackout window.</span></li>
+              </ul>
+            </div>
+
+            <div class="chart-stage" aria-label="Synthetic strategy chart demo">
+              <div class="chart-toolbar"><span><strong>SPY</strong> · synthetic paper setup</span><span id="chartPrice">$548.72</span></div>
+              <div class="chart" id="interactiveChart" tabindex="0" aria-label="Interactive synthetic paper chart. Move the pointer to inspect price and time.">
+                <div class="chart-scan" aria-hidden="true"></div><div class="live-price-line" id="siteLivePriceLine" aria-hidden="true"><span id="siteLivePriceTag">548.72</span></div><div class="chart-crosshair" id="siteChartCrosshair" aria-hidden="true"><i class="crosshair-x"></i><i class="crosshair-y"></i><span class="cursor-price" id="siteCursorPrice">548.72</span><span class="cursor-time" id="siteCursorTime">10:30</span><b></b></div>
+                <div class="candles" aria-hidden="true">
+                  <i class="candle up" style="--i:0;--h:28%"></i><i class="candle down" style="--i:1;--h:36%"></i><i class="candle up" style="--i:2;--h:34%"></i><i class="candle up" style="--i:3;--h:42%"></i><i class="candle down" style="--i:4;--h:31%"></i><i class="candle up" style="--i:5;--h:46%"></i><i class="candle up" style="--i:6;--h:52%"></i><i class="candle down" style="--i:7;--h:45%"></i><i class="candle up" style="--i:8;--h:58%"></i><i class="candle up" style="--i:9;--h:63%"></i><i class="candle down" style="--i:10;--h:51%"></i><i class="candle up" style="--i:11;--h:67%"></i><i class="candle up" style="--i:12;--h:72%"></i><i class="candle down" style="--i:13;--h:60%"></i><i class="candle up" style="--i:14;--h:78%"></i><i class="candle up" style="--i:15;--h:83%"></i><i class="candle down" style="--i:16;--h:74%"></i><i class="candle up" style="--i:17;--h:89%"></i>
+                </div>
+                <div class="entry-line"></div>
+                <div class="stop-line"></div>
+                <span class="chart-label entry">ENTRY 546.80</span>
+                <span class="chart-label stop">STOP 541.25</span>
+              </div>
+              <div class="chart-caption"><span>Illustrative data, not a recommendation.</span><span>Rules remain editable.</span></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="risk">
+          <div class="section-heading" data-reveal>
+            <h2>Risk is not fine print.</h2>
+            <p>Every thesis passes through evidence and risk gates before it can be promoted to a research shortlist. The interface shows exactly what passed, what needs attention, and what stopped the run.</p>
+          </div>
+
+          <div class="risk-table" data-reveal>
+            <div class="risk-row"><div class="risk-name">Maximum loss</div><div class="risk-copy">Caps modeled downside at the amount you define before a scenario is accepted.</div><div class="risk-state pass">PASS · 0.50%</div></div>
+            <div class="risk-row"><div class="risk-name">Liquidity</div><div class="risk-copy">Checks that the hypothetical position stays inside a configurable share of typical volume.</div><div class="risk-state pass">PASS · 0.08%</div></div>
+            <div class="risk-row"><div class="risk-name">Event window</div><div class="risk-copy">Pauses new entries around scheduled events you mark as off-limits.</div><div class="risk-state watch">WATCH · 42M</div></div>
+            <div class="risk-row"><div class="risk-name">Daily stop</div><div class="risk-copy">Halts the automation after the daily loss threshold is reached.</div><div class="risk-state block">BLOCK · ARMED</div></div>
+          </div>
+
+          <div class="packet-line" data-reveal aria-hidden="true">
+            <span class="packet">RULE 01</span><span class="packet">RISK 04</span><span class="packet">PAPER</span>
+          </div>
+        </section>
+
+        <section class="section" id="inspect">
+          <div class="section-heading" data-reveal>
+            <h2>Every decision leaves a trail.</h2>
+            <p>Watch the bot process conditions in real time, inspect the state that triggered each action, and keep a readable record of what happened.</p>
+          </div>
+
+          <div class="inspect-grid" data-reveal>
+            <div class="log-console">
+              <div class="log-head"><span>paper-run.log</span><span id="logClock">09:42:11</span></div>
+              <div class="log-lines">
+                <div class="log-line" style="--i:0"><time>09:41:52</time><span class="ok">CHECK</span><span>volume_ratio = 1.72  →  pass</span></div>
+                <div class="log-line" style="--i:1"><time>09:41:53</time><span class="ok">CHECK</span><span>close &gt; 20d_high  →  pass</span></div>
+                <div class="log-line" style="--i:2"><time>09:41:53</time><span class="warn">SIZE</span><span>risk_budget = 0.50%  →  17 shares</span></div>
+                <div class="log-line" style="--i:3"><time>09:41:54</time><span class="ok">QUEUE</span><span>research scenario prepared @ latest quote</span></div>
+                <div class="log-line" style="--i:4"><time>09:41:55</time><span class="ok">FILL</span><span>17 SPY @ 548.72 (synthetic)</span></div>
+                <div class="log-line" style="--i:5"><time>09:41:55</time><span class="warn">STOP</span><span>protective stop staged @ 541.25</span></div>
+                <div class="log-line" style="--i:6"><time>09:42:04</time><span class="ok">WATCH</span><span>event blackout in 42 minutes</span></div>
+                <div class="log-line" style="--i:7"><time>09:42:10</time><span class="halt">HALT</span><span>daily stop remains armed</span></div>
+              </div>
+            </div>
+
+            <div class="order-book">
+              <div class="book-head"><span>Order book</span><span>synthetic</span></div>
+              <div class="book-columns"><span>Price</span><span>Size</span><span>Total</span></div>
+              <div id="askRows">
+                <div class="book-row ask" style="--depth:64%"><span class="price">548.79</span><span>142</span><span>311</span></div>
+                <div class="book-row ask" style="--depth:51%"><span class="price">548.77</span><span>81</span><span>169</span></div>
+                <div class="book-row ask" style="--depth:43%"><span class="price">548.75</span><span>56</span><span>88</span></div>
+              </div>
+              <div class="book-spread">SPREAD 0.02</div>
+              <div id="bidRows">
+                <div class="book-row bid" style="--depth:59%"><span class="price">548.73</span><span>76</span><span>124</span></div>
+                <div class="book-row bid" style="--depth:72%"><span class="price">548.71</span><span>121</span><span>268</span></div>
+                <div class="book-row bid" style="--depth:48%"><span class="price">548.68</span><span>63</span><span>146</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section pricing-section" id="pricing">
+          <div class="section-heading" data-reveal>
+            <h2>Plans that map to the actual product.</h2>
+            <p>Three signed tiers, one transparent price model. Every purchase is a prepaid license—not an automatic subscription—and every activation is bound to the device limit you choose.</p>
+          </div>
+
+          <div class="pricing-meta" data-reveal>
+            <span><strong>Pricing basis:</strong> one device for 30 days. Longer terms and additional devices are calculated pro-rata.</span>
+            <span>Payment: USDT only · manual verification · no in-app purchasing</span>
+          </div>
+
+          <div class="pricing-grid" id="pricingGrid" data-reveal>
+            <article class="plan" style="--plan-index:0" data-tier="CORE">
+              <div class="plan-name"><h3>Core</h3><span>TB3 / CORE</span></div>
+              <div class="plan-price"><strong>49</strong><span>USDT per 30 days / device</span></div>
+              <p class="plan-copy">The complete research foundation for one focused workstation.</p>
+              <ul class="plan-features">
+                <li>Public live market data</li><li>TL;DR research shortlist</li><li>Historical backtesting</li><li>Streaming AI copilot</li>
+              </ul>
+              <button class="plan-button" type="button" data-choose-tier="CORE">Choose Core</button>
+            </article>
+            <article class="plan is-selected" style="--plan-index:1" data-tier="PRO">
+              <div class="plan-name"><h3>Pro</h3><span>TB3 / PRO</span></div>
+              <div class="plan-price"><strong>129</strong><span>USDT per 30 days / device</span></div>
+              <p class="plan-copy">The operating tier for deeper research, diagnostics, and read-only broker context.</p>
+              <ul class="plan-features">
+                <li>Everything in Core</li><li>Signal scanner and scenarios</li><li>Risk desk and Trade Autopsy</li><li>Read-only broker connection</li>
+              </ul>
+              <button class="plan-button" type="button" data-choose-tier="PRO">Choose Pro</button>
+            </article>
+            <article class="plan" style="--plan-index:2" data-tier="MAX">
+              <div class="plan-name"><h3>Max</h3><span>TB3 / MAX</span></div>
+              <div class="plan-price"><strong>299</strong><span>USDT per 30 days / device</span></div>
+              <p class="plan-copy">The full research suite for quantitative testing and custom AI workflows.</p>
+              <ul class="plan-features">
+                <li>Everything in Pro</li><li>Quant Lab validation suite</li><li>Custom OpenRouter models</li><li>Full research module access</li>
+              </ul>
+              <button class="plan-button" type="button" data-choose-tier="MAX">Choose Max</button>
+            </article>
+          </div>
+
+          <div class="feature-matrix" data-reveal aria-label="Plan feature comparison">
+            <div class="feature-row header"><span>Capability</span><span>Core</span><span>Pro</span><span>Max</span></div>
+            <div class="feature-row"><span>Live public data and research dashboard</span><span class="yes">YES</span><span class="yes">YES</span><span class="yes">YES</span></div>
+            <div class="feature-row"><span>TL;DR daily / weekly / position research</span><span class="yes">YES</span><span class="yes">YES</span><span class="yes">YES</span></div>
+            <div class="feature-row"><span>Backtests and streaming copilot</span><span class="yes">YES</span><span class="yes">YES</span><span class="yes">YES</span></div>
+            <div class="feature-row"><span>Signal scanner, scenarios, risk, autopsy</span><span>—</span><span class="yes">YES</span><span class="yes">YES</span></div>
+            <div class="feature-row"><span>Read-only broker context</span><span>—</span><span class="yes">YES</span><span class="yes">YES</span></div>
+            <div class="feature-row"><span>Quant Lab and custom AI models</span><span>—</span><span>—</span><span class="yes">YES</span></div>
+          </div>
+        </section>
+
+        <section class="section checkout-section" id="purchase">
+          <div class="section-heading" data-reveal>
+            <h2>Buy a signed license with USDT.</h2>
+            <p>Choose the entitlement, send the exact amount to the published address, then submit the transaction receipt and your TradingBot 3000 Device ID. UselessExpensive Software verifies the payment before issuing a key.</p>
+          </div>
+
+          <div class="checkout-shell" data-reveal>
+            <div class="checkout-column">
+              <div class="checkout-head"><h3>1. Configure the license</h3><span id="checkoutSelection">Pro · 30 days · 1 device</span></div>
+              <div class="field-row">
+                <div class="field"><label for="checkoutTier">Tier</label><select id="checkoutTier"><option value="CORE">Core — 49 USDT</option><option value="PRO" selected>Pro — 129 USDT</option><option value="MAX">Max — 299 USDT</option></select></div>
+                <div class="field"><label for="checkoutDuration">Validity</label><select id="checkoutDuration"><option value="7">7 days</option><option value="30" selected>30 days</option><option value="90">90 days</option><option value="365">365 days</option></select></div>
+                <div class="field"><label for="checkoutDevices">Device limit</label><input id="checkoutDevices" type="number" min="1" max="10" step="1" value="1" inputmode="numeric"></div>
+                <div class="field"><label for="checkoutNetwork">USDT network</label><select id="checkoutNetwork"><option value="Ethereum (ERC-20)" selected>Ethereum (ERC-20)</option></select><span class="field-help">The address is configured for ERC-20 in this release. Do not use another network.</span></div>
+              </div>
+              <div class="price-readout" aria-live="polite"><span>Exact payment amount</span><strong><span id="checkoutAmount">129.00</span> USDT</strong><p id="checkoutFormula">129 × 30/30 × 1 device</p></div>
+              <div class="legal-strip">
+                <div><strong>No auto-renewal</strong><span>The license ends on its signed expiry date.</span></div>
+                <div><strong>Device-bound</strong><span>Each activation consumes one licensed seat.</span></div>
+                <div><strong>Research only</strong><span>The application cannot route purchases or trades.</span></div>
+              </div>
+            </div>
+
+            <div class="checkout-column">
+              <div class="checkout-head"><h3>2. Pay and submit proof</h3><span>USDT only · receipt required</span></div>
+              <div class="payment-slab">
+                <div class="payment-row"><span>Asset</span><strong>USDT</strong><button class="copy-control" type="button" data-copy="USDT">Copy</button></div>
+                <div class="payment-row"><span>Network</span><strong id="paymentNetwork">Ethereum (ERC-20)</strong><button class="copy-control" type="button" data-copy-target="paymentNetwork">Copy</button></div>
+                <div class="payment-row"><span>Address</span><code id="paymentAddress">0x25db24d66a9574bca8d31e72ab835e6a8339ddfa</code><button class="copy-control" type="button" data-copy-target="paymentAddress">Copy</button></div>
+                <div class="payment-row"><span>Amount</span><strong id="paymentAmount">129.00 USDT</strong><button class="copy-control" type="button" data-copy-target="paymentAmount">Copy</button></div>
+                <div class="payment-row"><span>Reference</span><code id="purchaseReference">TB3-PENDING</code><button class="copy-control" type="button" data-copy-target="purchaseReference">Copy</button></div>
+              </div>
+              <p class="payment-warning"><strong>Network check:</strong> send only native USDT on the exact network shown. Sending another token or using another transport protocol can make the payment unrecoverable.</p>
+              <button class="packet-button" id="copyPaymentInstructions" type="button" style="width:100%;margin-top:10px">Copy full payment instructions</button>
+
+              <form class="receipt-form" id="purchaseForm" enctype="multipart/form-data" novalidate>
+                <div class="field-row">
+                  <div class="field"><label for="buyerName">Name / company</label><input id="buyerName" name="buyerName" maxlength="100" autocomplete="organization" placeholder="Acme Research" required></div>
+                  <div class="field"><label for="buyerEmail">Reply email</label><input id="buyerEmail" name="buyerEmail" type="email" maxlength="180" autocomplete="email" placeholder="you@example.com" required></div>
+                  <div class="field full"><label for="deviceIds">TradingBot 3000 Device ID(s)</label><textarea id="deviceIds" name="deviceIds" maxlength="1200" placeholder="TB3D-…&#10;One Device ID per line when buying multiple seats." required></textarea><span class="field-help">Copy the Device ID from the app’s activation screen. At least one ID is required.</span></div>
+                  <div class="field full"><label for="transactionHash">USDT transaction hash</label><input id="transactionHash" name="transactionHash" maxlength="80" spellcheck="false" placeholder="0x…" required><span class="field-help">Use the final transaction hash from your wallet or exchange.</span></div>
+                  <div class="field full"><label for="receiptFile">Receipt screenshot or PDF</label><input id="receiptFile" name="receipt" type="file" accept="image/png,image/jpeg,image/webp,application/pdf"><span class="field-help">Optional when the transaction hash is complete. Maximum 6 MB through the included mailer.</span></div>
+                </div>
+                <label class="consent"><input id="purchaseConsent" type="checkbox" required><span>I confirm that the tier, duration, device count, network, destination address, and exact USDT amount are correct. I understand that fulfillment begins after payment verification.</span></label>
+                <button class="checkout-button" id="submitPurchase" type="submit">Email payment receipt</button>
+                <div class="purchase-actions"><button class="packet-button" id="copyPurchasePacket" type="button">Copy purchase packet</button><button class="packet-button" id="downloadPurchasePacket" type="button">Download receipt text</button></div>
+                <div class="purchase-status" id="purchaseStatus" role="status" aria-live="polite"></div>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <footer class="site-footer">
+          <span>© 2026 UselessExpensive Software. All rights reserved. TradingBot 3000 is research-only software; it does not route orders.</span>
+          <div class="footer-links"><a class="footer-link" href="#pricing">Pricing</a><a class="footer-link" href="#purchase">Buy with USDT</a><a class="footer-link" href="mailto:purchase@irancord.ir">Purchase support</a><a class="footer-link" href="#home">Back to top</a></div>
+        </footer>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    (() => {
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      const siteField = document.getElementById('site-field');
+      const siteCtx = siteField.getContext('2d');
+      const cursorOrbit = document.getElementById('cursor-orbit');
+      const scrollProgress = document.getElementById('scroll-progress-bar');
+      const fieldNodes = Array.from({ length: 90 }, (_, i) => ({ x:(i*173)%1600, y:(i*97)%900, vx:.12+(i%7)*.018, vy:((i%5)-2)*.035, size:i%13===0?2:1, phase:i*.63 }));
+      let sitePointer = { x: innerWidth*.64, y: innerHeight*.4, visible:false };
+      const fitSiteField = () => { const dpr=Math.min(devicePixelRatio||1,2); const rect=siteField.getBoundingClientRect(); siteField.width=Math.max(1,Math.floor(rect.width*dpr)); siteField.height=Math.max(1,Math.floor(rect.height*dpr)); siteCtx.setTransform(dpr,0,0,dpr,0,0); return rect; };
+      const drawSiteField = (time) => {
+        const rect=fitSiteField(); const w=rect.width,h=rect.height; siteCtx.clearRect(0,0,w,h);
+        if (!reducedMotion) {
+          fieldNodes.forEach((n,i)=>{ n.x=(n.x+n.vx+w)%w; n.y=(n.y+n.vy+h)%h; const d=Math.hypot(n.x-(sitePointer.x-parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--rail-width'))||0),n.y-sitePointer.y); const p=Math.max(0,1-d/300); siteCtx.fillStyle=`rgba(255,255,255,${.025+p*.16})`; siteCtx.fillRect(n.x,n.y,n.size,n.size); if(i%8===0){siteCtx.strokeStyle=`rgba(255,255,255,${.02+p*.055})`;siteCtx.beginPath();siteCtx.moveTo(n.x,n.y);siteCtx.lineTo(n.x+36+Math.sin(time/900+i)*22,n.y-18);siteCtx.stroke();}});
+        }
+        requestAnimationFrame(drawSiteField);
+      };
+      requestAnimationFrame(drawSiteField);
+      window.addEventListener('pointermove', event => { sitePointer={x:event.clientX,y:event.clientY,visible:true}; cursorOrbit.style.transform=`translate3d(${event.clientX}px,${event.clientY}px,0)`; cursorOrbit.style.opacity='1'; cursorOrbit.classList.toggle('hot',Boolean(event.target.closest('button,a,input,textarea,.chart'))); }, {passive:true});
+      window.addEventListener('pointerleave',()=>cursorOrbit.style.opacity='0');
+      const updateScrollProgress=()=>{const max=Math.max(1,document.documentElement.scrollHeight-innerHeight);scrollProgress.style.width=`${Math.min(100,scrollY/max*100)}%`;};
+      addEventListener('scroll',updateScrollProgress,{passive:true}); updateScrollProgress();
+      document.querySelectorAll('.conversation-demo,.risk-table,.inspect-grid,.pricing-grid,.checkout-shell').forEach(node=>node.addEventListener('pointermove',event=>{const r=node.getBoundingClientRect();node.style.setProperty('--spot-x',`${event.clientX-r.left}px`);node.style.setProperty('--spot-y',`${event.clientY-r.top}px`);}));
+      document.querySelectorAll('.primary-button,.quick-action,.plan-button,.checkout-button,.copy-control,.packet-button').forEach(button=>button.addEventListener('pointermove',event=>{const r=button.getBoundingClientRect(); const x=(event.clientX-r.left-r.width/2)*.12; const y=(event.clientY-r.top-r.height/2)*.12; button.style.transform=`translate(${x}px,${y}px)`;}));
+      document.querySelectorAll('.primary-button,.quick-action,.plan-button,.checkout-button,.copy-control,.packet-button').forEach(button=>button.addEventListener('pointerleave',()=>button.style.transform=''));
+
+      const interactiveChart=document.getElementById('interactiveChart');
+      const siteCrosshair=document.getElementById('siteChartCrosshair');
+      const siteCursorPrice=document.getElementById('siteCursorPrice');
+      const siteCursorTime=document.getElementById('siteCursorTime');
+      const siteLiveLine=document.getElementById('siteLivePriceLine');
+      const siteLiveTag=document.getElementById('siteLivePriceTag');
+      const updateSiteCrosshair=(event)=>{const r=interactiveChart.getBoundingClientRect();const x=Math.max(0,Math.min(r.width,event.clientX-r.left));const y=Math.max(0,Math.min(r.height,event.clientY-r.top));const price=552-(y/r.height)*14;const minutes=Math.round((x/r.width)*390);const hh=9+Math.floor((30+minutes)/60);const mm=(30+minutes)%60;siteCrosshair.classList.add('is-active');siteCrosshair.querySelector('.crosshair-x').style.left=`${x}px`;siteCrosshair.querySelector('.crosshair-y').style.top=`${y}px`;siteCrosshair.querySelector('b').style.left=`${x}px`;siteCrosshair.querySelector('b').style.top=`${y}px`;siteCursorPrice.style.top=`${y}px`;siteCursorPrice.textContent=price.toFixed(2);siteCursorTime.style.left=`${x}px`;siteCursorTime.textContent=`${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}`;document.getElementById('chartPrice').textContent=`$${price.toFixed(2)}`;};
+      interactiveChart.addEventListener('pointermove',updateSiteCrosshair);
+      interactiveChart.addEventListener('pointerleave',()=>siteCrosshair.classList.remove('is-active'));
+      interactiveChart.addEventListener('focus',()=>siteCrosshair.classList.add('is-active'));
+
+      const input = document.getElementById('strategyInput');
+      const form = document.getElementById('strategyForm');
+      const submit = document.getElementById('submitStrategy');
+      const runPanel = document.getElementById('runPanel');
+      const runSteps = [...document.querySelectorAll('.run-step')];
+      const runTitle = document.getElementById('runTitle');
+      const runStatus = document.getElementById('runStatus');
+      const outputKicker = document.getElementById('outputKicker');
+      const outputTitle = document.getElementById('outputTitle');
+      const outputText = document.getElementById('outputText');
+      const compiledInput = document.getElementById('compiledInput');
+      const compiledRisk = document.getElementById('compiledRisk');
+      const runAgain = document.getElementById('runAgain');
+      const riskMode = document.getElementById('riskMode');
+
+      const prompts = [
+        'Build a breakout strategy with a hard daily stop',
+        'Backtest a moving-average crossover with fees',
+        'Pause entries before high-impact events',
+        'Size every trade to a 0.5% risk budget'
+      ];
+      let promptIndex = 0;
+      let placeholderTimer;
+
+      const typePlaceholder = () => {
+        if (reducedMotion || document.activeElement === input || input.value) return;
+        const target = prompts[promptIndex % prompts.length];
+        promptIndex += 1;
+        let i = 0;
+        input.placeholder = '';
+        const type = () => {
+          if (document.activeElement === input || input.value) return;
+          input.placeholder = target.slice(0, i++);
+          if (i <= target.length) {
+            setTimeout(type, 24);
+          } else {
+            placeholderTimer = setTimeout(typePlaceholder, 1800);
+          }
+        };
+        type();
+      };
+      placeholderTimer = setTimeout(typePlaceholder, 1100);
+
+      const autoResize = () => {
+        input.style.height = 'auto';
+        input.style.height = Math.min(input.scrollHeight, 130) + 'px';
+      };
+      input.addEventListener('input', autoResize);
+      input.addEventListener('focus', () => { clearTimeout(placeholderTimer); input.placeholder = 'Describe your market idea'; });
+      input.addEventListener('blur', () => { if (!input.value) placeholderTimer = setTimeout(typePlaceholder, 500); });
+
+      document.querySelectorAll('[data-prompt]').forEach((button) => {
+        button.addEventListener('click', () => {
+          input.value = button.dataset.prompt;
+          autoResize();
+          input.focus();
+          input.setSelectionRange(input.value.length, input.value.length);
+        });
+      });
+
+      const wait = (ms) => new Promise(resolve => setTimeout(resolve, reducedMotion ? 1 : ms));
+
+      async function runStrategy(text) {
+        submit.disabled = true;
+        runAgain.hidden = true;
+        runPanel.classList.add('is-open');
+        runSteps.forEach(step => step.className = 'run-step');
+        compiledInput.textContent = text;
+        compiledRisk.textContent = riskMode.value;
+        runTitle.textContent = 'Compiling strategy';
+        runStatus.textContent = 'Working';
+        outputKicker.textContent = 'Reading your setup';
+        outputTitle.textContent = 'Turning the idea into conditions…';
+        outputText.textContent = 'Every assumption, threshold, horizon, and failure condition must be explicit before the result is trusted.';
+        runPanel.scrollIntoView({ block: 'nearest', behavior: reducedMotion ? 'auto' : 'smooth' });
+
+        const states = [
+          ['Reading market intent', 'Separating the entry idea from position sizing, exits, and timing constraints.'],
+          ['Compiling explicit rules', 'Replacing fuzzy language with conditions the paper engine can evaluate.'],
+          ['Stress-checking risk', `Applying the ${riskMode.value.toLowerCase()} research profile before the scenario is accepted.`],
+          ['Research package ready', 'The thesis is readable, editable, source-linked, and architecturally unable to route a live order.']
+        ];
+
+        for (let i = 0; i < runSteps.length; i++) {
+          runSteps.forEach((step, index) => {
+            step.classList.toggle('is-active', index === i);
+            step.classList.toggle('is-done', index < i);
+            if (index < i) step.querySelector('.step-dot').textContent = '✓';
+            else step.querySelector('.step-dot').textContent = index + 1;
+          });
+          outputKicker.textContent = `Stage ${i + 1} of ${states.length}`;
+          outputTitle.textContent = states[i][0];
+          outputText.textContent = states[i][1];
+          await wait(760);
+        }
+
+        runSteps.forEach((step) => {
+          step.classList.remove('is-active');
+          step.classList.add('is-done');
+          step.querySelector('.step-dot').textContent = '✓';
+        });
+        runTitle.textContent = 'Strategy compiled';
+        runStatus.textContent = 'Paper-ready';
+        outputKicker.textContent = 'Illustrative result';
+        outputTitle.textContent = 'Rules built. Risk remains visible.';
+        outputText.textContent = 'Next, review each condition and run it against synthetic or historical paper data before considering any live use.';
+        runAgain.hidden = false;
+        submit.disabled = false;
+      }
+
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const text = input.value.trim() || 'Build a conservative breakout strategy with fixed risk and no overnight positions.';
+        runStrategy(text);
+      });
+
+      runAgain.addEventListener('click', () => {
+        input.value = '';
+        autoResize();
+        runPanel.classList.remove('is-open');
+        input.focus();
+      });
+
+      document.querySelectorAll('.mode-button').forEach(button => {
+        button.addEventListener('click', () => {
+          document.querySelectorAll('.mode-button').forEach(item => item.setAttribute('aria-selected', String(item === button)));
+          const watch = button.dataset.mode === 'Watch';
+          document.getElementById('hero-title').innerHTML = watch
+            ? '<span class="word" style="--word:0">What</span> <span class="word" style="--word:1">needs</span> <span class="word" style="--word:2">your</span> <span class="word" style="--word:3">attention</span> <span class="word" style="--word:4">now?</span>'
+            : '<span class="word" style="--word:0">What</span> <span class="word" style="--word:1">should</span> <span class="word" style="--word:2">the</span> <span class="word" style="--word:3">market</span> <span class="word" style="--word:4">do</span> <span class="word" style="--word:5">today?</span>';
+          input.placeholder = watch ? 'Ask about a paper run' : 'Describe your market idea';
+        });
+      });
+
+      const assets = [
+        ['SPY', 548.72], ['BTC', 67842], ['EUR/USD', 1.0842], ['NVDA', 121.46], ['GOLD', 2389.8], ['QQQ', 477.31], ['ETH', 3538]
+      ];
+      const renderTicker = (target) => {
+        const items = [...assets, ...assets].map(([name, value], index) => {
+          const delta = ((index % 3 === 0 ? 1 : -1) * (0.08 + (index % 5) * 0.03));
+          const formatted = value > 10000 ? value.toLocaleString('en-US', { maximumFractionDigits: 0 }) : value.toLocaleString('en-US', { minimumFractionDigits: value < 2 ? 4 : 2, maximumFractionDigits: value < 2 ? 4 : 2 });
+          return `<span>${name} ${formatted} <b class="${delta > 0 ? 'up' : 'down'}">${delta > 0 ? '+' : ''}${delta.toFixed(2)}%</b></span>`;
+        }).join('');
+        target.innerHTML = items;
+      };
+      renderTicker(document.getElementById('tickerTop'));
+      renderTicker(document.getElementById('tickerBottom'));
+
+      if (!reducedMotion) {
+        setInterval(() => {
+          const price = 548.72 + (Math.random() - .5) * .24;
+          document.getElementById('chartPrice').textContent = '$' + price.toFixed(2);
+          const y = Math.max(8, Math.min(92, 100 - ((price - 540) / 14) * 100));
+          siteLiveLine.style.top = `${y}%`; siteLiveTag.textContent = price.toFixed(2);
+          document.querySelectorAll('.book-row').forEach((row, index) => {
+            const priceCell = row.querySelector('.price');
+            const base = row.classList.contains('ask') ? price + .02 + index * .02 : price - .02 - (index % 3) * .02;
+            priceCell.textContent = base.toFixed(2);
+            const cells = row.querySelectorAll('span');
+            cells[1].textContent = Math.floor(40 + Math.random() * 120);
+            cells[2].textContent = Math.floor(80 + Math.random() * 280);
+            row.style.setProperty('--depth', Math.floor(38 + Math.random() * 42) + '%');
+          });
+        }, 2200);
+      }
+
+      const logClock = document.getElementById('logClock');
+      setInterval(() => {
+        logClock.textContent = new Date().toLocaleTimeString('en-US', { hour12: false });
+      }, 1000);
+
+      const reveal = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            reveal.unobserve(entry.target);
+          }
+        });
+      }, { threshold: .13 });
+      document.querySelectorAll('[data-reveal]').forEach(el => reveal.observe(el));
+
+      const sidebar = document.getElementById('sidebar');
+      const scrim = document.getElementById('scrim');
+      const mobileMenu = document.getElementById('mobileMenu');
+      const setMenu = (open) => {
+        sidebar.classList.toggle('is-open', open);
+        scrim.classList.toggle('is-open', open);
+        mobileMenu.setAttribute('aria-expanded', String(open));
+        document.body.style.overflow = open ? 'hidden' : '';
+      };
+      mobileMenu.addEventListener('click', () => setMenu(!sidebar.classList.contains('is-open')));
+      scrim.addEventListener('click', () => setMenu(false));
+      sidebar.querySelectorAll('a').forEach(link => link.addEventListener('click', () => setMenu(false)));
+      window.addEventListener('keydown', event => { if (event.key === 'Escape') setMenu(false); });
+
+
+      const PURCHASE_CONFIG = Object.freeze({
+        asset: 'USDT',
+        network: 'Ethereum (ERC-20)',
+        address: '0x25db24d66a9574bca8d31e72ab835e6a8339ddfa',
+        email: 'purchase@irancord.ir',
+        endpoint: '/api/purchase',
+        tiers: Object.freeze({ CORE: { name: 'Core', price: 49 }, PRO: { name: 'Pro', price: 129 }, MAX: { name: 'Max', price: 299 } }),
+        durations: Object.freeze([7, 30, 90, 365])
+      });
+      const purchaseState = { tier: 'PRO', duration: 30, devices: 1, reference: '' };
+      const $id = (id) => document.getElementById(id);
+      const checkoutTier = $id('checkoutTier');
+      const checkoutDuration = $id('checkoutDuration');
+      const checkoutDevices = $id('checkoutDevices');
+      const checkoutNetwork = $id('checkoutNetwork');
+      const purchaseStatus = $id('purchaseStatus');
+      const purchaseForm = $id('purchaseForm');
+      const submitPurchase = $id('submitPurchase');
+      const receiptFile = $id('receiptFile');
+
+      const makeReference = () => {
+        const stamp = new Date().toISOString().replace(/[-:TZ.]/g, '').slice(0, 14);
+        const random = (crypto.randomUUID?.() || Math.random().toString(36).slice(2)).replace(/-/g, '').slice(0, 8).toUpperCase();
+        return `TB3-${stamp}-${random}`;
+      };
+      purchaseState.reference = localStorage.getItem('tb3-purchase-reference') || makeReference();
+      localStorage.setItem('tb3-purchase-reference', purchaseState.reference);
+
+      const calculateAmount = () => {
+        const plan = PURCHASE_CONFIG.tiers[purchaseState.tier];
+        return Math.round((plan.price * purchaseState.duration / 30 * purchaseState.devices + Number.EPSILON) * 100) / 100;
+      };
+      const amountText = () => calculateAmount().toFixed(2);
+      const setPurchaseStatus = (message, error = false) => {
+        purchaseStatus.textContent = message;
+        purchaseStatus.classList.toggle('error', error);
+      };
+      const updateCheckout = () => {
+        purchaseState.tier = checkoutTier.value;
+        purchaseState.duration = Math.max(7, Number(checkoutDuration.value));
+        purchaseState.devices = Math.max(1, Math.min(10, Math.floor(Number(checkoutDevices.value) || 1)));
+        checkoutDevices.value = purchaseState.devices;
+        const plan = PURCHASE_CONFIG.tiers[purchaseState.tier];
+        $id('checkoutSelection').textContent = `${plan.name} · ${purchaseState.duration} days · ${purchaseState.devices} device${purchaseState.devices === 1 ? '' : 's'}`;
+        $id('checkoutAmount').textContent = amountText();
+        $id('checkoutFormula').textContent = `${plan.price} × ${purchaseState.duration}/30 × ${purchaseState.devices} device${purchaseState.devices === 1 ? '' : 's'} · pro-rata, no automatic renewal`;
+        $id('paymentAmount').textContent = `${amountText()} USDT`;
+        $id('paymentNetwork').textContent = checkoutNetwork.value;
+        $id('purchaseReference').textContent = purchaseState.reference;
+        document.querySelectorAll('.plan').forEach((planEl) => planEl.classList.toggle('is-selected', planEl.dataset.tier === purchaseState.tier));
+        localStorage.setItem('tb3-purchase-draft', JSON.stringify({ tier: purchaseState.tier, duration: purchaseState.duration, devices: purchaseState.devices }));
+      };
+      try {
+        const draft = JSON.parse(localStorage.getItem('tb3-purchase-draft') || '{}');
+        if (PURCHASE_CONFIG.tiers[draft.tier]) checkoutTier.value = draft.tier;
+        if (PURCHASE_CONFIG.durations.includes(Number(draft.duration))) checkoutDuration.value = String(draft.duration);
+        if (Number.isInteger(Number(draft.devices))) checkoutDevices.value = String(Math.max(1, Math.min(10, Number(draft.devices))));
+      } catch {}
+      [checkoutTier, checkoutDuration, checkoutDevices, checkoutNetwork].forEach((control) => control.addEventListener('change', updateCheckout));
+      checkoutDevices.addEventListener('input', updateCheckout);
+      document.querySelectorAll('[data-choose-tier]').forEach((button) => button.addEventListener('click', () => {
+        checkoutTier.value = button.dataset.chooseTier;
+        updateCheckout();
+        $id('purchase').scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
+      }));
+
+      const copyText = async (text) => {
+        try { await navigator.clipboard.writeText(text); return true; }
+        catch {
+          const area = document.createElement('textarea'); area.value = text; area.setAttribute('readonly', ''); area.style.position = 'fixed'; area.style.opacity = '0'; document.body.appendChild(area); area.select();
+          const ok = document.execCommand('copy'); area.remove(); return ok;
+        }
+      };
+      document.querySelectorAll('[data-copy], [data-copy-target]').forEach((button) => button.addEventListener('click', async () => {
+        const value = button.dataset.copy || $id(button.dataset.copyTarget)?.textContent?.trim() || '';
+        await copyText(value);
+        const original = button.textContent; button.textContent = 'Copied'; setTimeout(() => button.textContent = original, 1200);
+      }));
+
+      const sha256File = async (file) => {
+        if (!file) return '';
+        const hash = await crypto.subtle.digest('SHA-256', await file.arrayBuffer());
+        return [...new Uint8Array(hash)].map((value) => value.toString(16).padStart(2, '0')).join('');
+      };
+      const buildPurchasePacket = async () => {
+        const file = receiptFile.files[0];
+        const fileHash = file ? await sha256File(file) : '';
+        const deviceIds = $id('deviceIds').value.trim();
+        return [
+          'TRADINGBOT 3000 PURCHASE RECEIPT',
+          `Reference: ${purchaseState.reference}`,
+          `Purchaser: ${$id('buyerName').value.trim()}`,
+          `Reply email: ${$id('buyerEmail').value.trim()}`,
+          `Tier: ${purchaseState.tier} (${PURCHASE_CONFIG.tiers[purchaseState.tier].name})`,
+          `Validity: ${purchaseState.duration} days`,
+          `Device limit: ${purchaseState.devices}`,
+          `Device ID(s):\n${deviceIds}`,
+          `Payment asset: ${PURCHASE_CONFIG.asset}`,
+          `Payment network: ${checkoutNetwork.value}`,
+          `Destination: ${PURCHASE_CONFIG.address}`,
+          `Exact amount: ${amountText()} USDT`,
+          `Transaction hash: ${$id('transactionHash').value.trim()}`,
+          `Receipt file: ${file ? `${file.name} (${file.size} bytes)` : 'not attached'}`,
+          `Receipt SHA-256: ${fileHash || 'n/a'}`,
+          `Submitted: ${new Date().toISOString()}`,
+          '',
+          'Please verify payment and issue the signed product key and activation instructions.'
+        ].join('\n');
+      };
+      const validatePurchase = () => {
+        if (!purchaseForm.reportValidity()) return 'Complete all required fields.';
+        const tx = $id('transactionHash').value.trim();
+        if (!/^0x[a-fA-F0-9]{64}$/.test(tx)) return 'Enter a complete 66-character EVM transaction hash beginning with 0x.';
+        const ids = $id('deviceIds').value.split(/\n+/).map((value) => value.trim()).filter(Boolean);
+        if (!ids.length || ids.some((id) => id.length < 10 || id.length > 160)) return 'Enter at least one valid TradingBot 3000 Device ID.';
+        const file = receiptFile.files[0];
+        if (file && file.size > 6 * 1024 * 1024) return 'The receipt file must be 6 MB or smaller.';
+        return '';
+      };
+      const openEmailDraft = async (packet) => {
+        await copyText(packet);
+        const subject = encodeURIComponent(`TradingBot 3000 purchase ${purchaseState.reference}`);
+        const body = encodeURIComponent(packet + (receiptFile.files[0] ? '\n\nATTACHMENT: Please attach the selected receipt file before sending.' : ''));
+        window.location.href = `mailto:${PURCHASE_CONFIG.email}?subject=${subject}&body=${body}`;
+        setPurchaseStatus(`Email draft opened for ${PURCHASE_CONFIG.email}. The full receipt was copied; attach the selected file before sending.`);
+      };
+      const postPurchase = async () => {
+        const data = new FormData(purchaseForm);
+        data.set('reference', purchaseState.reference);
+        data.set('tier', purchaseState.tier);
+        data.set('durationDays', String(purchaseState.duration));
+        data.set('maxDevices', String(purchaseState.devices));
+        data.set('asset', PURCHASE_CONFIG.asset);
+        data.set('network', checkoutNetwork.value);
+        data.set('address', PURCHASE_CONFIG.address);
+        data.set('amount', amountText());
+        const response = await fetch(PURCHASE_CONFIG.endpoint, { method: 'POST', body: data, headers: { Accept: 'application/json' } });
+        const payload = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(payload.error || `Purchase mailer returned ${response.status}.`);
+        return payload;
+      };
+      purchaseForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const problem = validatePurchase();
+        if (problem) { setPurchaseStatus(problem, true); return; }
+        submitPurchase.disabled = true;
+        submitPurchase.textContent = 'Preparing receipt…';
+        setPurchaseStatus('Validating the purchase packet…');
+        try {
+          const packet = await buildPurchasePacket();
+          if (location.protocol === 'http:' || location.protocol === 'https:') {
+            try {
+              await postPurchase();
+              setPurchaseStatus(`Receipt sent to ${PURCHASE_CONFIG.email}. Keep reference ${purchaseState.reference}.`);
+              submitPurchase.textContent = 'Receipt sent';
+              localStorage.removeItem('tb3-purchase-reference');
+              return;
+            } catch (error) {
+              console.warn('Purchase mailer unavailable; opening email fallback.', error);
+            }
+          }
+          await openEmailDraft(packet);
+          submitPurchase.textContent = 'Email draft prepared';
+        } catch (error) {
+          setPurchaseStatus(error.message || 'Could not prepare the payment receipt.', true);
+          submitPurchase.textContent = 'Email payment receipt';
+        } finally {
+          submitPurchase.disabled = false;
+        }
+      });
+      $id('copyPaymentInstructions').addEventListener('click', async () => {
+        const instructions = [
+          'TRADINGBOT 3000 PAYMENT INSTRUCTIONS',
+          `Reference: ${purchaseState.reference}`,
+          `Tier: ${purchaseState.tier}`,
+          `Validity: ${purchaseState.duration} days`,
+          `Device limit: ${purchaseState.devices}`,
+          `Asset: ${PURCHASE_CONFIG.asset}`,
+          `Network: ${checkoutNetwork.value}`,
+          `Address: ${PURCHASE_CONFIG.address}`,
+          `Exact amount: ${amountText()} USDT`,
+          `Receipt email: ${PURCHASE_CONFIG.email}`,
+          '',
+          'Send only USDT on the exact network shown. After payment, email the transaction hash and TradingBot 3000 Device ID.'
+        ].join('\n');
+        await copyText(instructions); setPurchaseStatus('Full payment instructions copied.');
+      });
+      $id('copyPurchasePacket').addEventListener('click', async () => {
+        const problem = validatePurchase(); if (problem) { setPurchaseStatus(problem, true); return; }
+        await copyText(await buildPurchasePacket()); setPurchaseStatus('Complete purchase packet copied.');
+      });
+      $id('downloadPurchasePacket').addEventListener('click', async () => {
+        const problem = validatePurchase(); if (problem) { setPurchaseStatus(problem, true); return; }
+        const blob = new Blob([await buildPurchasePacket()], { type: 'text/plain;charset=utf-8' });
+        const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `${purchaseState.reference}-receipt.txt`; document.body.appendChild(link); link.click(); link.remove(); setTimeout(() => URL.revokeObjectURL(link.href), 1000); setPurchaseStatus('Receipt text downloaded.');
+      });
+      $id('sidebarSearch')?.addEventListener('click', () => { $id('home').scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth' }); setTimeout(() => input.focus(), reducedMotion ? 0 : 450); });
+      $id('voicePreview')?.addEventListener('click', () => { input.placeholder = 'Voice capture is available in the desktop application'; input.focus(); });
+      updateCheckout();
+
+
+      const sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          const id = entry.target.id;
+          const navItems = [...document.querySelectorAll('.nav-item')];
+          navItems.forEach(item => item.classList.remove('is-active'));
+          if (id === 'home') {
+            navItems[0]?.classList.add('is-active');
+          } else {
+            document.querySelector(`.nav-item[href="#${id}"]`)?.classList.add('is-active');
+          }
+        });
+      }, { rootMargin: '-40% 0px -50% 0px' });
+      document.querySelectorAll('section[id]').forEach(section => sectionObserver.observe(section));
+    })();
+  </script>
+</body>
+</html>
